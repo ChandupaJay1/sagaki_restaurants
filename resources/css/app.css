@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Full viewport app shell (no stray page scrollbars) ────────── */
+html,
+body,
+#app {
+    height: 100%;
+}
+
+body {
+    overflow: hidden;
+}
+
 /* ─── Hide scrollbar for category tabs ─────────────────────────── */
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
