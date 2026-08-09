@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Full viewport app shell (no stray page scrollbars) ────────── */
+html,
+body {
+    height: 100%;
+}
+
+body {
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
 /* ─── Hide scrollbar for category tabs ─────────────────────────── */
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
@@ -44,4 +55,109 @@
     .focus-ring {
         @apply focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900;
     }
+}
+
+/* ═══ Shared design tokens — replicated from the React design ════
+   Login + Dashboard + POS entry animations */
+
+@keyframes fg-slide-up {
+    from { opacity: 0; transform: translateY(32px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fg-slide-right {
+    from { opacity: 0; transform: translateX(-32px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes fg-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+@keyframes fg-drift {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33%       { transform: translate(16px, -20px) rotate(2deg); }
+    66%       { transform: translate(-12px, 14px) rotate(-1deg); }
+}
+@keyframes fg-shimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position: 200% center; }
+}
+@keyframes fg-pulse-glow {
+    0%, 100% { opacity: .3; }
+    50%       { opacity: .65; }
+}
+@keyframes fg-float-tag {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-5px); }
+}
+@keyframes fg-kpi-in {
+    from { opacity: 0; transform: translateY(16px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+@keyframes fg-chart-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fg-row-in {
+    from { opacity: 0; transform: translateX(-8px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes fg-pulse-sm {
+    0%, 100% { opacity: .4; }
+    50%       { opacity: .8; }
+}
+@keyframes fg-bar-grow {
+    from { transform: scaleY(0); }
+    to   { transform: scaleY(1); }
+}
+
+.fg-card        { animation: fg-slide-up .7s cubic-bezier(.22,1,.36,1) .15s both; }
+.fg-brand       { animation: fg-fade-in   .9s cubic-bezier(.22,1,.36,1) both; }
+.fg-slide-r     { animation: fg-slide-right .7s cubic-bezier(.22,1,.36,1) both; }
+.fg-drift       { animation: fg-drift     14s ease-in-out infinite; }
+.fg-drift-slow  { animation: fg-drift     18s ease-in-out infinite reverse; }
+.fg-pulse       { animation: fg-pulse-glow 4s ease-in-out infinite; }
+.fg-float       { animation: fg-float-tag 5s ease-in-out infinite; }
+.fg-pulse-soft  { animation: fg-pulse-sm 3s ease-in-out infinite; }
+.fg-shimmer-btn {
+    background: linear-gradient(
+        110deg,
+        transparent 30%,
+        rgba(255,255,255,.18) 50%,
+        transparent 70%
+    );
+    background-size: 200% 100%;
+    animation: fg-shimmer 3.5s linear infinite;
+}
+.fg-panel-sep {
+    background: linear-gradient(to bottom, transparent, rgb(99 102 241 / .15), transparent);
+}
+
+.fg-kpi-1 { animation: fg-kpi-in .55s cubic-bezier(.22,1,.36,1) .05s both; }
+.fg-kpi-2 { animation: fg-kpi-in .55s cubic-bezier(.22,1,.36,1) .10s both; }
+.fg-kpi-3 { animation: fg-kpi-in .55s cubic-bezier(.22,1,.36,1) .15s both; }
+.fg-kpi-4 { animation: fg-kpi-in .55s cubic-bezier(.22,1,.36,1) .20s both; }
+.fg-chart { animation: fg-chart-in .6s cubic-bezier(.22,1,.36,1) .25s both; }
+.fg-row   { animation: fg-row-in   .4s cubic-bezier(.22,1,.36,1) both; }
+.fg-row-1 { animation-delay: .35s; }
+.fg-row-2 { animation-delay: .40s; }
+.fg-row-3 { animation-delay: .45s; }
+.fg-row-4 { animation-delay: .50s; }
+.fg-row-5 { animation-delay: .55s; }
+.fg-row-6 { animation-delay: .60s; }
+.fg-row-7 { animation-delay: .65s; }
+
+.fg-bar-anim {
+    transform-origin: bottom;
+    animation: fg-bar-grow .6s cubic-bezier(.22,1,.36,1) both;
+}
+
+/* ─── Glass card helpers ───────────────────────────────────────── */
+.glass-card {
+    @apply rounded-2xl p-6 transition-all duration-300;
+}
+.glass-card-dark {
+    @apply bg-slate-900/80 backdrop-blur-2xl border border-slate-800/80 hover:border-indigo-500/40 shadow-xl shadow-black/40;
+}
+.glass-card-light {
+    @apply bg-white border border-slate-200/80 hover:border-indigo-300 shadow-sm hover:shadow-lg hover:shadow-indigo-500/10;
 }

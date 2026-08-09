@@ -8,7 +8,7 @@
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600|inter:400,500,600,700&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
         @routes
@@ -16,7 +16,14 @@
         @vite(['resources/js/app.jsx', "resources/js/Pages/{$page['component']}.jsx"])
         @inertiaHead
     </head>
-    <body class="font-sans antialiased">
+    <body class="font-sans antialiased" style="font-family: 'Inter', 'Figtree', sans-serif;">
+        <script>
+            (function() {
+                var theme = localStorage.getItem('pos-theme');
+                var dark = theme ? theme === 'dark' : true;
+                document.documentElement.classList.toggle('dark', dark);
+            })();
+        </script>
         @inertia
     </body>
 </html>
