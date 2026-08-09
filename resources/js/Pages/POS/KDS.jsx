@@ -134,33 +134,33 @@ function OrderCard({ order, onAdvance }) {
 
     return (
         <div className={`
-            bg-slate-800 border rounded-xl p-4
+            bg-white dark:bg-slate-800 border rounded-xl p-4
             transition-all duration-200 hover:shadow-lg
             ${isOverdue
                 ? 'border-red-500/50 shadow-red-500/10'
                 : order.status === 'new'
-                ? `${statusConfig?.border || 'border-slate-700'} shadow-lg`
-                : 'border-slate-700/60'
+                ? `${statusConfig?.border || 'border-slate-200 dark:border-slate-700'} shadow-lg`
+                : 'border-slate-200 dark:border-slate-700/60'
             }
         `}>
             {/* Card header */}
             <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                    <span className="text-white font-bold text-sm">{order.id}</span>
+                    <span className="text-slate-850 dark:text-white font-bold text-sm">{order.id}</span>
                     {order.priority === 'high' && (
-                        <span className="flex items-center gap-1 text-red-400 text-xs font-medium bg-red-500/10 px-2 py-0.5 rounded-full">
+                        <span className="flex items-center gap-1 text-red-650 dark:text-red-400 text-xs font-medium bg-red-500/10 px-2 py-0.5 rounded-full">
                             <AlertCircle size={12} />
                             HIGH
                         </span>
                     )}
                 </div>
                 <div className="flex items-center gap-2">
-                    <span className="flex items-center gap-1 text-slate-400 text-xs bg-slate-700/60 px-2 py-1 rounded-lg">
+                    <span className="flex items-center gap-1 text-slate-500 dark:text-slate-400 text-xs bg-slate-100 dark:bg-slate-700/60 px-2 py-1 rounded-lg">
                         <Clock size={12} />
                         {formatTime(order.time)}
                     </span>
                     {isOverdue && (
-                        <span className="flex items-center gap-1 text-red-400 text-xs bg-red-500/10 px-2 py-1 rounded-lg animate-pulse">
+                        <span className="flex items-center gap-1 text-red-500 dark:text-red-400 text-xs bg-red-500/10 px-2 py-1 rounded-lg animate-pulse">
                             <Timer size={12} />
                             OVERDUE
                         </span>
@@ -172,7 +172,7 @@ function OrderCard({ order, onAdvance }) {
             <div className="mb-3">
                 <span className="
                     inline-flex items-center gap-1.5
-                    bg-indigo-500/15 text-indigo-400
+                    bg-indigo-500/15 text-indigo-600 dark:text-indigo-400
                     text-xs font-semibold px-2.5 py-1 rounded-lg
                 ">
                     <Utensils size={12} />
@@ -184,13 +184,13 @@ function OrderCard({ order, onAdvance }) {
             <div className="space-y-1.5 mb-4">
                 {order.items.map((item, idx) => (
                     <div key={idx} className="flex items-start gap-2">
-                        <span className="bg-slate-700/60 text-slate-300 text-xs font-bold w-5 h-5 rounded flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <span className="bg-slate-100 dark:bg-slate-700/60 text-slate-700 dark:text-slate-300 text-xs font-bold w-5 h-5 rounded flex items-center justify-center flex-shrink-0 mt-0.5">
                             {item.qty}
                         </span>
                         <div className="flex-1 min-w-0">
-                            <p className="text-white text-sm font-medium truncate">{item.name}</p>
+                            <p className="text-slate-850 dark:text-white text-sm font-medium truncate">{item.name}</p>
                             {item.options.length > 0 && (
-                                <p className="text-slate-500 text-xs truncate">
+                                <p className="text-slate-400 dark:text-slate-500 text-xs truncate">
                                     {item.options.map((o) => `• ${o}`).join(' ')}
                                 </p>
                             )}
@@ -207,9 +207,9 @@ function OrderCard({ order, onAdvance }) {
                         w-full py-2.5 rounded-xl text-sm font-semibold
                         transition-all duration-200 active:scale-[.97]
                         ${statusConfig?.bg}
-                        ${statusConfig?.color === 'blue' ? 'text-blue-400 hover:bg-blue-500/20 border border-blue-500/30' : ''}
-                        ${statusConfig?.color === 'amber' ? 'text-amber-400 hover:bg-amber-500/20 border border-amber-500/30' : ''}
-                        ${statusConfig?.color === 'emerald' ? 'text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/30' : ''}
+                        ${statusConfig?.color === 'blue' ? 'text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 border border-blue-500/30' : ''}
+                        ${statusConfig?.color === 'amber' ? 'text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 border border-amber-500/30' : ''}
+                        ${statusConfig?.color === 'emerald' ? 'text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/30' : ''}
                     `}
                 >
                     <span className="flex items-center justify-center gap-2">
@@ -220,7 +220,7 @@ function OrderCard({ order, onAdvance }) {
             )}
 
             {order.status === 'served' && (
-                <div className="flex items-center justify-center gap-2 text-slate-500 text-sm py-2.5">
+                <div className="flex items-center justify-center gap-2 text-slate-400 dark:text-slate-500 text-sm py-2.5">
                     <CheckCircle2 size={14} />
                     Served
                 </div>
@@ -241,13 +241,13 @@ function KanbanColumn({ column, orders, onAdvance, totalOrders }) {
                 rounded-xl
             `}>
                 <span className={`w-2 h-2 rounded-full ${column.dot}`} />
-                <span className="text-white font-bold text-sm flex-1">{column.label}</span>
+                <span className="text-slate-850 dark:text-white font-bold text-sm flex-1">{column.label}</span>
                 <span className={`
                     text-xs font-bold px-2 py-0.5 rounded-full
-                    ${column.id === 'new' ? 'bg-blue-500/20 text-blue-400' : ''}
-                    ${column.id === 'preparing' ? 'bg-amber-500/20 text-amber-400' : ''}
-                    ${column.id === 'ready' ? 'bg-emerald-500/20 text-emerald-400' : ''}
-                    ${column.id === 'served' ? 'bg-slate-500/20 text-slate-400' : ''}
+                    ${column.id === 'new' ? 'bg-blue-500/20 text-blue-600 dark:text-blue-400' : ''}
+                    ${column.id === 'preparing' ? 'bg-amber-500/20 text-amber-600 dark:text-amber-400' : ''}
+                    ${column.id === 'ready' ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400' : ''}
+                    ${column.id === 'served' ? 'bg-slate-500/20 text-slate-500 dark:text-slate-400' : ''}
                 `}>
                     {count}
                 </span>
@@ -258,7 +258,7 @@ function KanbanColumn({ column, orders, onAdvance, totalOrders }) {
                 {orders.filter((o) => o.status === column.id).length === 0 ? (
                     <div className="
                         flex flex-col items-center justify-center py-12
-                        text-slate-600 border border-dashed border-slate-700/60
+                        text-slate-400 dark:text-slate-600 border border-dashed border-slate-200 dark:border-slate-700/60
                         rounded-xl
                     ">
                         <ChefHat size={28} strokeWidth={1.5} />
@@ -318,27 +318,27 @@ export default function KDS() {
             <div className="flex flex-col h-full">
                 {/* Header */}
                 <header className="
-                    px-6 py-4 bg-slate-800/80 border-b border-slate-700/60
+                    px-6 py-4 bg-white/80 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700/60
                     flex items-center justify-between flex-shrink-0
                     backdrop-blur-sm
                 ">
                     <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 bg-violet-600 rounded-xl flex items-center justify-center shadow-lg shadow-violet-500/30">
+                        <div className="w-9 h-9 bg-violet-650 dark:bg-violet-650 rounded-xl flex items-center justify-center shadow-lg shadow-violet-500/30">
                             <ChefHat size={18} className="text-white" />
                         </div>
                         <div>
-                            <h1 className="text-lg font-bold text-white">Kitchen Display System</h1>
-                            <p className="text-slate-400 text-xs mt-0.5">Real-time order tracking</p>
+                            <h1 className="text-lg font-bold text-slate-850 dark:text-white">Kitchen Display System</h1>
+                            <p className="text-slate-500 dark:text-slate-400 text-xs mt-0.5">Real-time order tracking</p>
                         </div>
                     </div>
 
                     {/* Stats */}
                     <div className="flex items-center gap-3">
                         {[
-                            { label: 'New', count: newOrders, color: 'text-blue-400 bg-blue-500/10 border-blue-500/30' },
-                            { label: 'Preparing', count: preparingOrders, color: 'text-amber-400 bg-amber-500/10 border-amber-500/30' },
-                            { label: 'Ready', count: readyOrders, color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30' },
-                            { label: 'Served', count: servedOrders, color: 'text-slate-400 bg-slate-500/10 border-slate-500/30' },
+                            { label: 'New', count: newOrders, color: 'text-blue-600 dark:text-blue-400 bg-blue-500/10 border-blue-500/30' },
+                            { label: 'Preparing', count: preparingOrders, color: 'text-amber-600 dark:text-amber-400 bg-amber-500/10 border-amber-500/30' },
+                            { label: 'Ready', count: readyOrders, color: 'text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/30' },
+                            { label: 'Served', count: servedOrders, color: 'text-slate-650 dark:text-slate-400 bg-slate-500/10 border-slate-500/30' },
                         ].map((stat) => (
                             <div
                                 key={stat.label}
@@ -372,15 +372,15 @@ export default function KDS() {
 
                 {/* Footer */}
                 <footer className="
-                    px-6 py-2 bg-slate-800/60 border-t border-slate-700/40
+                    px-6 py-2 bg-white/60 dark:bg-slate-800/60 border-t border-slate-200 dark:border-slate-700/40
                     flex items-center justify-between text-xs text-slate-500
                     flex-shrink-0
                 ">
                     <span>
-                        Total Orders: <span className="text-white font-semibold">{orders.length}</span>
+                        Total Orders: <span className="text-slate-850 dark:text-white font-semibold">{orders.length}</span>
                     </span>
                     <span className="flex items-center gap-1">
-                        <Zap size={12} className="text-indigo-400" />
+                        <Zap size={12} className="text-indigo-600 dark:text-indigo-400" />
                         Auto-refreshing every minute
                     </span>
                 </footer>

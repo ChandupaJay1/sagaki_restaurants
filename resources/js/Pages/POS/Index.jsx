@@ -103,7 +103,7 @@ function CategoryTab({ category, isActive, onClick }) {
                 whitespace-nowrap transition-all duration-200
                 ${isActive
                     ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/30 ring-1 ring-indigo-400/50'
-                    : 'bg-slate-700/50 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-600/40'
+                    : 'bg-slate-200/50 dark:bg-slate-700/50 text-slate-750 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-600/40'
                 }
             `}
         >
@@ -118,8 +118,8 @@ function MenuCard({ item, onAdd }) {
         <button
             onClick={() => onAdd(item)}
             className="
-                group bg-slate-800 hover:bg-slate-750
-                border border-slate-700/60 hover:border-indigo-500/60
+                group bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750
+                border border-slate-200 dark:border-slate-700/60 hover:border-indigo-500/60
                 rounded-2xl p-4 text-left transition-all duration-200
                 hover:shadow-lg hover:shadow-indigo-500/10
                 active:scale-95
@@ -130,7 +130,7 @@ function MenuCard({ item, onAdd }) {
                 {item.emoji}
             </div>
             <div className="flex-1">
-                <p className="text-white font-semibold text-sm leading-tight mb-1 line-clamp-2">
+                <p className="text-slate-800 dark:text-white font-semibold text-sm leading-tight mb-1 line-clamp-2">
                     {item.name}
                 </p>
                 {item.tags.length > 0 && (
@@ -143,7 +143,7 @@ function MenuCard({ item, onAdd }) {
                                         ? 'bg-red-500/20 text-red-400'
                                         : tag === 'vegan'
                                         ? 'bg-emerald-500/20 text-emerald-400'
-                                        : 'bg-slate-600 text-slate-300'
+                                        : 'bg-slate-200 dark:bg-slate-600 text-slate-600 dark:text-slate-300'
                                 }`}
                             >
                                 {tag}
@@ -152,8 +152,8 @@ function MenuCard({ item, onAdd }) {
                     </div>
                 )}
             </div>
-            <div className="mt-3 pt-3 border-t border-slate-700/40 flex items-center justify-between">
-                <span className="text-indigo-400 font-bold text-base">
+            <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-700/40 flex items-center justify-between w-full">
+                <span className="text-indigo-650 dark:text-indigo-400 font-bold text-base">
                     {formatLKR(item.price)}
                 </span>
                 <span className="
@@ -174,16 +174,16 @@ function CartItem({ item, onIncrease, onDecrease, onRemove }) {
     return (
         <div className="
             flex items-center gap-3 py-3
-            border-b border-slate-700/40
+            border-b border-slate-200 dark:border-slate-800/40
             last:border-0
-            hover:bg-slate-700/20 rounded-lg px-2 -mx-2 transition-colors
+            hover:bg-slate-100 dark:hover:bg-slate-700/20 rounded-lg px-2 -mx-2 transition-colors
         ">
             <span className="text-2xl flex-shrink-0">{item.emoji}</span>
             <div className="flex-1 min-w-0">
-                <p className="text-white text-sm font-medium leading-tight truncate">
+                <p className="text-slate-800 dark:text-white text-sm font-medium leading-tight truncate">
                     {item.name}
                 </p>
-                <p className="text-indigo-400 text-sm font-semibold mt-0.5">
+                <p className="text-indigo-600 dark:text-indigo-400 text-sm font-semibold mt-0.5">
                     {formatLKR(item.price * item.qty)}
                 </p>
             </div>
@@ -191,14 +191,14 @@ function CartItem({ item, onIncrease, onDecrease, onRemove }) {
                 <button
                     onClick={() => onDecrease(item.id)}
                     className="
-                        w-7 h-7 bg-slate-700 hover:bg-slate-600
+                        w-7 h-7 bg-slate-200 dark:bg-slate-700 hover:bg-slate-350 dark:hover:bg-slate-600
                         rounded-lg flex items-center justify-center
                         transition-colors
                     "
                 >
-                    <Minus size={12} className="text-slate-300" />
+                    <Minus size={12} className="text-slate-605 dark:text-slate-305" />
                 </button>
-                <span className="w-6 text-center text-white font-bold text-sm tabular-nums">
+                <span className="w-6 text-center text-slate-800 dark:text-white font-bold text-sm tabular-nums">
                     {item.qty}
                 </span>
                 <button
@@ -303,19 +303,19 @@ export default function POSIndex() {
                 <div className="flex-1 flex flex-col overflow-hidden">
 
                     {/* Header */}
-                    <header className="px-6 py-4 bg-slate-800/80 border-b border-slate-700/60 flex items-center justify-between gap-4 flex-shrink-0 backdrop-blur-sm">
+                    <header className="px-6 py-4 bg-white dark:bg-slate-800/80 border-b border-slate-205 dark:border-slate-700/60 flex items-center justify-between gap-4 flex-shrink-0 backdrop-blur-sm">
                         <div className="flex items-center gap-3">
                             <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/30">
                                 <UtensilsCrossed size={18} className="text-white" />
                             </div>
                             <div>
-                                <h1 className="text-lg font-bold text-white leading-none">POS Billing</h1>
-                                <p className="text-slate-400 text-xs mt-0.5">New Order</p>
+                                <h1 className="text-lg font-bold text-slate-800 dark:text-white leading-none">POS Billing</h1>
+                                <p className="text-slate-500 dark:text-slate-400 text-xs mt-0.5">New Order</p>
                             </div>
                         </div>
 
                         {/* Order type toggle */}
-                        <div className="flex bg-slate-700/60 rounded-xl p-0.5 border border-slate-600/40">
+                        <div className="flex bg-slate-100 dark:bg-slate-700/60 rounded-xl p-0.5 border border-slate-200 dark:border-slate-600/40">
                             {['dine-in', 'takeaway'].map((type) => (
                                 <button
                                     key={type}
@@ -324,7 +324,7 @@ export default function POSIndex() {
                                         px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200
                                         ${orderType === type
                                             ? 'bg-indigo-600 text-white shadow-md'
-                                            : 'text-slate-400 hover:text-white'
+                                            : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                                         }
                                     `}
                                 >
@@ -342,9 +342,9 @@ export default function POSIndex() {
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className="
-                                    w-full bg-slate-700/60 border border-slate-600/60
-                                    rounded-xl pl-9 pr-4 py-2.5 text-sm text-white
-                                    placeholder-slate-400
+                                    w-full bg-slate-50 dark:bg-slate-700/60 border border-slate-200 dark:border-slate-600/60
+                                    rounded-xl pl-9 pr-4 py-2.5 text-sm text-slate-850 dark:text-white
+                                    placeholder-slate-400 dark:placeholder-slate-500
                                     focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/50
                                     transition-colors
                                 "
@@ -352,7 +352,7 @@ export default function POSIndex() {
                             {searchQuery && (
                                 <button
                                     onClick={() => setSearchQuery('')}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
                                 >
                                     <X size={14} />
                                 </button>
@@ -362,16 +362,16 @@ export default function POSIndex() {
                         {/* Table input */}
                         {orderType === 'dine-in' && (
                             <div className="flex items-center gap-2">
-                                <label className="text-slate-400 text-sm whitespace-nowrap">Table</label>
+                                <label className="text-slate-500 dark:text-slate-400 text-sm whitespace-nowrap">Table</label>
                                 <input
                                     type="text"
                                     placeholder="e.g. T4"
                                     value={tableNumber}
                                     onChange={(e) => setTableNumber(e.target.value)}
                                     className="
-                                        w-20 bg-slate-700/60 border border-slate-600/60
-                                        rounded-xl px-3 py-2.5 text-sm text-white
-                                        placeholder-slate-500
+                                        w-20 bg-slate-50 dark:bg-slate-700/60 border border-slate-200 dark:border-slate-600/60
+                                        rounded-xl px-3 py-2.5 text-sm text-slate-850 dark:text-white
+                                        placeholder-slate-550
                                         focus:outline-none focus:border-indigo-500
                                         transition-colors text-center font-semibold
                                     "
@@ -381,7 +381,7 @@ export default function POSIndex() {
                     </header>
 
                     {/* Category Tabs */}
-                    <div className="px-6 py-3 bg-slate-800/40 border-b border-slate-700/40 flex-shrink-0">
+                    <div className="px-6 py-3 bg-white dark:bg-slate-800/40 border-b border-slate-200 dark:border-slate-700/40 flex-shrink-0">
                         <div className="flex gap-2 overflow-x-auto pb-0.5">
                             {CATEGORIES.map((cat) => (
                                 <CategoryTab
@@ -397,7 +397,7 @@ export default function POSIndex() {
                     {/* Menu Grid */}
                     <div className="flex-1 overflow-y-auto px-6 py-5">
                         {filteredItems.length === 0 ? (
-                            <div className="flex flex-col items-center justify-center h-full text-slate-500 gap-3">
+                            <div className="flex flex-col items-center justify-center h-full text-slate-450 gap-3">
                                 <Search size={40} strokeWidth={1.5} />
                                 <p className="text-lg font-medium">No items found</p>
                                 <p className="text-sm">Try a different category or search term</p>
@@ -414,19 +414,19 @@ export default function POSIndex() {
 
                 {/* ── RIGHT: Cart Sidebar ───────────────────────────────── */}
                 <aside className="
-                    w-96 flex flex-col bg-slate-800
-                    border-l border-slate-700/60
-                    flex-shrink-0
+                    w-96 flex flex-col bg-white dark:bg-slate-900
+                    border-l border-slate-200 dark:border-slate-800
+                    flex-shrink-0 shadow-lg
                 ">
                     {/* Cart Header */}
-                    <div className="px-5 py-4 border-b border-slate-700/60 flex items-center justify-between flex-shrink-0">
+                    <div className="px-5 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between flex-shrink-0">
                         <div className="flex items-center gap-2.5">
                             <div className="w-8 h-8 bg-indigo-600/20 rounded-lg flex items-center justify-center">
-                                <ShoppingCart size={16} className="text-indigo-400" />
+                                <ShoppingCart size={16} className="text-indigo-600 dark:text-indigo-405" />
                             </div>
                             <div>
-                                <h2 className="text-white font-bold text-sm">Current Order</h2>
-                                <p className="text-slate-500 text-xs">
+                                <h2 className="text-slate-800 dark:text-white font-bold text-sm">Current Order</h2>
+                                <p className="text-slate-500 dark:text-slate-400 text-xs">
                                     {orderType === 'dine-in'
                                         ? (tableNumber ? `Table ${tableNumber}` : 'No table set')
                                         : 'Take Away'
@@ -443,7 +443,7 @@ export default function POSIndex() {
                             <button
                                 onClick={clearCart}
                                 className="
-                                    text-slate-500 hover:text-red-400
+                                    text-slate-500 hover:text-red-500
                                     transition-colors flex items-center gap-1 text-xs
                                     px-2 py-1 rounded-lg hover:bg-red-500/10
                                 "
@@ -457,8 +457,8 @@ export default function POSIndex() {
                     {/* Cart Items */}
                     <div className="flex-1 overflow-y-auto px-5">
                         {cart.length === 0 ? (
-                            <div className="flex flex-col items-center justify-center h-full text-slate-500 gap-3 py-16">
-                                <div className="w-16 h-16 bg-slate-700/50 rounded-2xl flex items-center justify-center">
+                            <div className="flex flex-col items-center justify-center h-full text-slate-400 dark:text-slate-500 gap-3 py-16">
+                                <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800/50 rounded-2xl flex items-center justify-center border border-slate-200/50 dark:border-slate-800">
                                     <ShoppingCart size={32} strokeWidth={1.5} />
                                 </div>
                                 <p className="text-sm font-medium">Cart is empty</p>
@@ -483,16 +483,16 @@ export default function POSIndex() {
 
                     {/* Order Note */}
                     {cart.length > 0 && (
-                        <div className="px-5 pt-2 pb-3 border-t border-slate-700/40">
+                        <div className="px-5 pt-2 pb-3 border-t border-slate-200 dark:border-slate-800/40">
                             <textarea
                                 placeholder="Order note (allergies, preferences...)"
                                 value={orderNote}
                                 onChange={(e) => setOrderNote(e.target.value)}
                                 rows={2}
                                 className="
-                                    w-full bg-slate-700/50 border border-slate-600/50
-                                    rounded-xl px-3 py-2 text-xs text-white
-                                    placeholder-slate-500
+                                    w-full bg-slate-50 dark:bg-slate-750 border border-slate-200 dark:border-slate-700/60
+                                    rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-white
+                                    placeholder-slate-400 dark:placeholder-slate-500
                                     focus:outline-none focus:border-indigo-500
                                     resize-none transition-colors
                                 "
@@ -501,20 +501,20 @@ export default function POSIndex() {
                     )}
 
                     {/* Totals */}
-                    <div className="px-5 pt-3 pb-2 border-t border-slate-700/60 space-y-2 flex-shrink-0">
-                        <div className="flex justify-between text-sm text-slate-400">
+                    <div className="px-5 pt-3 pb-2 border-t border-slate-200 dark:border-slate-800/60 space-y-2 flex-shrink-0">
+                        <div className="flex justify-between text-sm text-slate-500 dark:text-slate-400">
                             <span>Subtotal</span>
-                            <span className="text-white tabular-nums">{formatLKR(subtotal)}</span>
+                            <span className="text-slate-850 dark:text-white font-semibold tabular-nums">{formatLKR(subtotal)}</span>
                         </div>
                         {serviceCharge > 0 && (
-                            <div className="flex justify-between text-sm text-slate-400">
+                            <div className="flex justify-between text-sm text-slate-500 dark:text-slate-400">
                                 <span>Service Charge (10%)</span>
-                                <span className="text-white tabular-nums">{formatLKR(serviceCharge)}</span>
+                                <span className="text-slate-850 dark:text-white font-semibold tabular-nums">{formatLKR(serviceCharge)}</span>
                             </div>
                         )}
-                        <div className="flex justify-between text-base font-bold pt-2 border-t border-slate-700/60">
-                            <span className="text-white">Grand Total</span>
-                            <span className="text-indigo-400 text-lg tabular-nums">{formatLKR(grandTotal)}</span>
+                        <div className="flex justify-between text-base font-bold pt-2 border-t border-slate-200 dark:border-slate-800/60">
+                            <span className="text-slate-800 dark:text-white">Grand Total</span>
+                            <span className="text-indigo-600 dark:text-indigo-400 text-lg tabular-nums">{formatLKR(grandTotal)}</span>
                         </div>
                     </div>
 
@@ -525,13 +525,13 @@ export default function POSIndex() {
                             disabled={cart.length === 0}
                             className={`
                                 w-full flex items-center justify-center gap-2.5 py-3
-                                rounded-xl font-semibold text-sm
+                                rounded-xl font-semibold text-sm border
                                 transition-all duration-200
                                 ${cart.length === 0
-                                    ? 'bg-slate-700/40 text-slate-500 cursor-not-allowed'
+                                    ? 'bg-slate-100 dark:bg-slate-800/40 text-slate-400 dark:text-slate-500 border-slate-200 dark:border-transparent cursor-not-allowed'
                                     : kotPrinted
-                                    ? 'bg-emerald-600/20 border border-emerald-500/50 text-emerald-400 hover:bg-emerald-600/30'
-                                    : 'bg-amber-500/15 border border-amber-500/40 text-amber-400 hover:bg-amber-500/25 active:scale-[.98]'
+                                    ? 'bg-emerald-600/20 border-emerald-500/50 text-emerald-500 dark:text-emerald-400 hover:bg-emerald-600/30'
+                                    : 'bg-amber-500/10 border-amber-500/40 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 active:scale-[.98]'
                                 }
                             `}
                         >
@@ -547,7 +547,7 @@ export default function POSIndex() {
                                 rounded-xl font-bold text-sm
                                 transition-all duration-200
                                 ${cart.length === 0
-                                    ? 'bg-slate-700/40 text-slate-500 cursor-not-allowed'
+                                    ? 'bg-slate-100 dark:bg-slate-800/40 text-slate-400 dark:text-slate-500 cursor-not-allowed'
                                     : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/30 active:scale-[.98]'
                                 }
                             `}

@@ -19,6 +19,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/pos/inventory', fn () => Inertia::render('POS/Inventory'))->name('pos.inventory');
     Route::get('/pos/crm', fn () => Inertia::render('POS/CRM'))->name('pos.crm');
     Route::get('/pos/reports', fn () => Inertia::render('POS/Reports'))->name('pos.reports');
+    Route::get('/pos/menu', fn () => Inertia::render('POS/Menu'))->name('pos.menu');
+    Route::get('/pos/purchases', fn () => Inertia::render('POS/Purchases'))->name('pos.purchases');
+    Route::get('/pos/delivery', fn () => Inertia::render('POS/Delivery'))->name('pos.delivery');
+    Route::get('/pos/staff', fn () => Inertia::render('POS/Staff'))->name('pos.staff');
+    Route::get('/pos/finance', fn () => Inertia::render('POS/Finance'))->name('pos.finance');
+    Route::get('/pos/branches', fn () => Inertia::render('POS/Branches'))->name('pos.branches');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

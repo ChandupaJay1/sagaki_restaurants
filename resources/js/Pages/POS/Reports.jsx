@@ -79,14 +79,14 @@ export default function Reports() {
             <Head title="Reports" />
             <div className="flex flex-col h-full">
                 {/* Header */}
-                <header className="px-6 py-4 bg-slate-800/80 border-b border-slate-700/60 flex items-center justify-between flex-shrink-0 backdrop-blur-sm">
+                <header className="px-6 py-4 bg-white/80 dark:bg-slate-800/80 border-b border-slate-205 dark:border-slate-700/60 flex items-center justify-between flex-shrink-0 backdrop-blur-sm">
                     <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 bg-violet-600 rounded-xl flex items-center justify-center shadow-lg shadow-violet-500/30">
+                        <div className="w-9 h-9 bg-violet-650 rounded-xl flex items-center justify-center shadow-lg shadow-violet-500/30">
                             <BarChart3 size={18} className="text-white" />
                         </div>
                         <div>
-                            <h1 className="text-lg font-bold text-white">Reports</h1>
-                            <p className="text-slate-400 text-xs mt-0.5">Financial & sales analytics</p>
+                            <h1 className="text-lg font-bold text-slate-855 dark:text-white">Reports</h1>
+                            <p className="text-slate-500 dark:text-slate-400 text-xs mt-0.5">Financial & sales analytics</p>
                         </div>
                     </div>
                     <button className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-xl transition-colors shadow-lg shadow-indigo-500/25">
@@ -98,7 +98,7 @@ export default function Reports() {
                 <div className="flex-1 overflow-y-auto px-6 py-5">
                     {/* Period Selector */}
                     <div className="flex items-center justify-between mb-5">
-                        <div className="flex bg-slate-800 border border-slate-700/60 rounded-xl p-0.5">
+                        <div className="flex bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 rounded-xl p-0.5 shadow-sm">
                             {['today', 'week', 'month'].map(p => (
                                 <button
                                     key={p}
@@ -106,8 +106,8 @@ export default function Reports() {
                                     className={`
                                         px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200
                                         ${period === p
-                                            ? 'bg-indigo-600 text-white shadow-md'
-                                            : 'text-slate-400 hover:text-white'
+                                            ? 'bg-indigo-650 text-white shadow-md'
+                                            : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                                         }
                                     `}
                                 >
@@ -126,23 +126,23 @@ export default function Reports() {
                     {/* Summary Cards */}
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
                         {[
-                            { label: 'Total Revenue', value: `LKR ${totals.totalRevenue.toLocaleString()}`, icon: DollarSign, color: 'text-indigo-400', bg: 'bg-indigo-500/10', change: '+12.5%', up: true },
-                            { label: 'Total Orders', value: totals.totalOrders.toString(), icon: ShoppingCart, color: 'text-emerald-400', bg: 'bg-emerald-500/10', change: '+8.2%', up: true },
-                            { label: 'Profit', value: `LKR ${totals.profit.toLocaleString()}`, icon: TrendingUp, color: 'text-violet-400', bg: 'bg-violet-500/10', change: `${totals.profitMargin}% margin`, up: true },
-                            { label: 'Avg. Order', value: `LKR ${totals.avgOrder}`, icon: Clock, color: 'text-amber-400', bg: 'bg-amber-500/10', change: '-2.1%', up: false },
+                            { label: 'Total Revenue', value: `LKR ${totals.totalRevenue.toLocaleString()}`, icon: DollarSign, color: 'text-indigo-650 dark:text-indigo-400', bg: 'bg-indigo-500/10', change: '+12.5%', up: true },
+                            { label: 'Total Orders', value: totals.totalOrders.toString(), icon: ShoppingCart, color: 'text-emerald-650 dark:text-emerald-400', bg: 'bg-emerald-500/10', change: '+8.2%', up: true },
+                            { label: 'Profit', value: `LKR ${totals.profit.toLocaleString()}`, icon: TrendingUp, color: 'text-violet-650 dark:text-violet-400', bg: 'bg-violet-500/10', change: `${totals.profitMargin}% margin`, up: true },
+                            { label: 'Avg. Order', value: `LKR ${totals.avgOrder}`, icon: Clock, color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10', change: '-2.1%', up: false },
                         ].map(({ label, value, icon: Icon, color, bg, change, up }) => (
-                            <div key={label} className="bg-slate-800 border border-slate-700/60 rounded-xl p-4">
+                            <div key={label} className="bg-white dark:bg-slate-800 border border-slate-205 dark:border-slate-700/60 rounded-xl p-4 shadow-sm">
                                 <div className="flex items-center justify-between mb-3">
                                     <div className={`w-9 h-9 ${bg} rounded-lg flex items-center justify-center`}>
                                         <Icon size={16} className={color} />
                                     </div>
-                                    <span className={`flex items-center gap-1 text-xs font-semibold ${up ? 'text-emerald-400' : 'text-red-400'}`}>
+                                    <span className={`flex items-center gap-1 text-xs font-semibold ${up ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-655 dark:text-red-400'}`}>
                                         {up ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
                                         {change}
                                     </span>
                                 </div>
-                                <p className="text-slate-500 text-xs mb-1">{label}</p>
-                                <p className="text-white font-bold text-lg">{value}</p>
+                                <p className="text-slate-500 dark:text-slate-400 text-xs mb-1">{label}</p>
+                                <p className="text-slate-855 dark:text-white font-bold text-lg">{value}</p>
                             </div>
                         ))}
                     </div>
@@ -150,15 +150,15 @@ export default function Reports() {
                     {/* Charts Row */}
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
                         {/* Revenue Chart */}
-                        <div className="lg:col-span-2 bg-slate-800 border border-slate-700/60 rounded-2xl p-5">
+                        <div className="lg:col-span-2 bg-white dark:bg-slate-800 border border-slate-205 dark:border-slate-700/60 rounded-2xl p-5 shadow-sm">
                             <div className="flex items-center justify-between mb-5">
                                 <div className="flex items-center gap-2.5">
                                     <div className="w-8 h-8 bg-indigo-500/15 rounded-lg flex items-center justify-center">
-                                        <BarChart3 size={15} className="text-indigo-400" />
+                                        <BarChart3 size={15} className="text-indigo-650 dark:text-indigo-400" />
                                     </div>
                                     <div>
-                                        <h2 className="text-white font-bold text-sm">Revenue Trend</h2>
-                                        <p className="text-slate-500 text-xs">
+                                        <h2 className="text-slate-855 dark:text-white font-bold text-sm">Revenue Trend</h2>
+                                        <p className="text-slate-500 dark:text-slate-400 text-xs">
                                             Peak: {totals.peak.hour || totals.peak.day || totals.peak.week} — LKR {totals.peak.revenue.toLocaleString()}
                                         </p>
                                     </div>
@@ -169,7 +169,7 @@ export default function Reports() {
                                 <div className="flex items-end justify-between gap-1 mb-1">
                                     {data.map((d, i) => (
                                         <div key={i} className="flex-1 flex justify-center">
-                                            <span className="text-[10px] text-slate-600 tabular-nums">
+                                            <span className="text-[10px] text-slate-400 dark:text-slate-600 tabular-nums">
                                                 {(d.revenue / 1000).toFixed(0)}k
                                             </span>
                                         </div>
@@ -187,14 +187,14 @@ export default function Reports() {
                                                         className={`
                                                             w-full max-w-[44px] rounded-t-md transition-all duration-500
                                                             ${isPeak
-                                                                ? 'bg-gradient-to-t from-indigo-600 to-indigo-400 shadow-lg shadow-indigo-500/30'
-                                                                : 'bg-slate-700 hover:bg-slate-600'
+                                                                ? 'bg-gradient-to-t from-indigo-600 to-indigo-455 shadow-lg shadow-indigo-500/30'
+                                                                : 'bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600'
                                                             }
                                                         `}
                                                         style={{ height: `${height}%` }}
                                                     />
                                                 </div>
-                                                <span className={`text-xs font-semibold whitespace-nowrap ${isPeak ? 'text-indigo-400' : 'text-slate-500'}`}>
+                                                <span className={`text-xs font-semibold whitespace-nowrap ${isPeak ? 'text-indigo-650 dark:text-indigo-400' : 'text-slate-450 dark:text-slate-500'}`}>
                                                     {d.hour || d.day || d.week}
                                                 </span>
                                             </div>
@@ -205,26 +205,26 @@ export default function Reports() {
                         </div>
 
                         {/* Payment Breakdown */}
-                        <div className="bg-slate-800 border border-slate-700/60 rounded-2xl p-5">
+                        <div className="bg-white dark:bg-slate-800 border border-slate-205 dark:border-slate-700/60 rounded-2xl p-5 shadow-sm">
                             <div className="flex items-center gap-2.5 mb-5">
                                 <div className="w-8 h-8 bg-emerald-500/15 rounded-lg flex items-center justify-center">
-                                    <DollarSign size={15} className="text-emerald-400" />
+                                    <DollarSign size={15} className="text-emerald-650 dark:text-emerald-400" />
                                 </div>
-                                <h2 className="text-white font-bold text-sm">Payment Methods</h2>
+                                <h2 className="text-slate-855 dark:text-white font-bold text-sm">Payment Methods</h2>
                             </div>
                             <div className="space-y-4">
                                 {PAYMENT_BREAKDOWN.map((pm) => (
                                     <div key={pm.method}>
                                         <div className="flex items-center justify-between mb-1.5">
-                                            <span className="text-slate-300 text-sm font-medium">{pm.method}</span>
+                                            <span className="text-slate-700 dark:text-slate-300 text-sm font-medium">{pm.method}</span>
                                             <div className="flex items-center gap-2">
-                                                <span className="text-white font-semibold text-sm tabular-nums">
+                                                <span className="text-slate-855 dark:text-white font-semibold text-sm tabular-nums">
                                                     LKR {pm.amount.toLocaleString()}
                                                 </span>
-                                                <span className="text-slate-500 text-xs w-8 text-right">{pm.pct}%</span>
+                                                <span className="text-slate-500 dark:text-slate-450 text-xs w-8 text-right">{pm.pct}%</span>
                                             </div>
                                         </div>
-                                        <div className="w-full bg-slate-700/60 rounded-full h-2">
+                                        <div className="w-full bg-slate-100 dark:bg-slate-700/60 rounded-full h-2">
                                             <div
                                                 className="bg-gradient-to-r from-emerald-500 to-teal-400 h-2 rounded-full transition-all duration-700"
                                                 style={{ width: `${pm.pct}%` }}
@@ -233,10 +233,10 @@ export default function Reports() {
                                     </div>
                                 ))}
                             </div>
-                            <div className="mt-5 pt-4 border-t border-slate-700/40">
+                            <div className="mt-5 pt-4 border-t border-slate-200 dark:border-slate-700/40">
                                 <div className="flex items-center justify-between">
-                                    <span className="text-slate-400 text-xs">Total Processed</span>
-                                    <span className="text-white font-bold text-sm tabular-nums">
+                                    <span className="text-slate-500 dark:text-slate-400 text-xs">Total Processed</span>
+                                    <span className="text-slate-855 dark:text-white font-bold text-sm tabular-nums">
                                         LKR {totals.totalRevenue.toLocaleString()}
                                     </span>
                                 </div>
@@ -247,54 +247,54 @@ export default function Reports() {
                     {/* Bottom Row: Cost Analysis + Top Items */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                         {/* Cost vs Revenue */}
-                        <div className="bg-slate-800 border border-slate-700/60 rounded-2xl p-5">
+                        <div className="bg-white dark:bg-slate-800 border border-slate-205 dark:border-slate-700/60 rounded-2xl p-5 shadow-sm">
                             <div className="flex items-center gap-2.5 mb-5">
                                 <div className="w-8 h-8 bg-amber-500/15 rounded-lg flex items-center justify-center">
-                                    <Percent size={15} className="text-amber-400" />
+                                    <Percent size={15} className="text-amber-600 dark:text-amber-400" />
                                 </div>
-                                <h2 className="text-white font-bold text-sm">Cost vs Revenue</h2>
+                                <h2 className="text-slate-855 dark:text-white font-bold text-sm">Cost vs Revenue</h2>
                             </div>
                             <div className="space-y-3">
                                 {data.map((d, i) => {
                                     const costPct = d.cost ? ((d.cost / d.revenue) * 100).toFixed(0) : 38;
                                     return (
                                         <div key={i} className="flex items-center gap-3">
-                                            <span className="text-slate-400 text-xs w-12 flex-shrink-0">{d.hour || d.day || d.week}</span>
+                                            <span className="text-slate-500 dark:text-slate-400 text-xs w-12 flex-shrink-0">{d.hour || d.day || d.week}</span>
                                             <div className="flex-1 flex gap-1 items-center">
                                                 {d.cost && (
-                                                    <div className="h-3 rounded-l-sm bg-red-500/60" style={{ width: `${costPct}%` }} />
+                                                    <div className="h-3 rounded-l-sm bg-red-500/50 dark:bg-red-500/60" style={{ width: `${costPct}%` }} />
                                                 )}
                                                 <div
-                                                    className="h-3 rounded-r-sm bg-emerald-500/60 flex-1"
+                                                    className="h-3 rounded-r-sm bg-emerald-500/50 dark:bg-emerald-500/60 flex-1"
                                                     style={{ width: d.cost ? `${100 - costPct}%` : '100%' }}
                                                 />
                                             </div>
-                                            <span className="text-slate-500 text-xs w-16 text-right tabular-nums">
+                                            <span className="text-slate-500 dark:text-slate-405 text-xs w-16 text-right tabular-nums">
                                                 {d.cost ? `${costPct}%` : '—'}
                                             </span>
                                         </div>
                                     );
                                 })}
                             </div>
-                            <div className="flex items-center gap-6 mt-4 pt-4 border-t border-slate-700/40">
+                            <div className="flex items-center gap-6 mt-4 pt-4 border-t border-slate-200 dark:border-slate-700/40">
                                 <div className="flex items-center gap-2">
                                     <span className="w-3 h-3 rounded-sm bg-red-500/60" />
-                                    <span className="text-slate-400 text-xs">Cost ({(totals.totalCost / totals.totalRevenue * 100).toFixed(0)}%)</span>
+                                    <span className="text-slate-550 dark:text-slate-400 text-xs">Cost ({(totals.totalCost / totals.totalRevenue * 100).toFixed(0)}%)</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <span className="w-3 h-3 rounded-sm bg-emerald-500/60" />
-                                    <span className="text-slate-400 text-xs">Profit ({totals.profitMargin}%)</span>
+                                    <span className="text-slate-550 dark:text-slate-400 text-xs">Profit ({totals.profitMargin}%)</span>
                                 </div>
                             </div>
                         </div>
 
                         {/* Top Items by Revenue */}
-                        <div className="bg-slate-800 border border-slate-700/60 rounded-2xl p-5">
+                        <div className="bg-white dark:bg-slate-800 border border-slate-205 dark:border-slate-700/60 rounded-2xl p-5 shadow-sm">
                             <div className="flex items-center gap-2.5 mb-5">
                                 <div className="w-8 h-8 bg-violet-500/15 rounded-lg flex items-center justify-center">
-                                    <FileText size={15} className="text-violet-400" />
+                                    <FileText size={15} className="text-violet-650 dark:text-violet-400" />
                                 </div>
-                                <h2 className="text-white font-bold text-sm">Top Items by Revenue</h2>
+                                <h2 className="text-slate-855 dark:text-white font-bold text-sm">Top Items by Revenue</h2>
                             </div>
                             <div className="space-y-3">
                                 {[
@@ -305,22 +305,22 @@ export default function Reports() {
                                     { name: 'Hoppers (3 pcs)', qty: 24, revenue: 10800, pct: 26 },
                                 ].map((item, i) => (
                                     <div key={i} className="flex items-center gap-3">
-                                        <span className="text-slate-600 text-xs font-mono w-4">{i + 1}</span>
+                                        <span className="text-slate-400 dark:text-slate-650 text-xs font-mono w-4">{i + 1}</span>
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center justify-between mb-1">
-                                                <p className="text-white text-sm font-medium truncate">{item.name}</p>
-                                                <span className="text-indigo-400 text-sm font-semibold tabular-nums ml-2">
+                                                <p className="text-slate-855 dark:text-white text-sm font-medium truncate">{item.name}</p>
+                                                <span className="text-indigo-650 dark:text-indigo-400 text-sm font-semibold tabular-nums ml-2">
                                                     LKR {item.revenue.toLocaleString()}
                                                 </span>
                                             </div>
-                                            <div className="w-full bg-slate-700/60 rounded-full h-1.5">
+                                            <div className="w-full bg-slate-100 dark:bg-slate-700/60 rounded-full h-1.5">
                                                 <div
                                                     className="bg-gradient-to-r from-violet-500 to-indigo-400 h-1.5 rounded-full"
                                                     style={{ width: `${item.pct}%` }}
                                                 />
                                             </div>
                                         </div>
-                                        <span className="text-slate-500 text-xs w-12 text-right flex-shrink-0">{item.qty} sold</span>
+                                        <span className="text-slate-500 dark:text-slate-450 text-xs w-12 text-right flex-shrink-0">{item.qty} sold</span>
                                     </div>
                                 ))}
                             </div>

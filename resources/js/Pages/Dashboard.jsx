@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Head } from '@inertiajs/react';
+import { useTheme } from '@/Components/ThemeProvider';
 import {
     TrendingDown,
     ShoppingCart,
@@ -380,17 +381,7 @@ function RevenueDonut({ value, max, color, label, sub, dark }) {
 export default function Dashboard() {
     const [period, setPeriod] = useState('today');
     const [currentTime, setCurrentTime] = useState(new Date());
-    const [isDarkMode, setIsDarkMode] = useState(() => {
-        if (typeof window === 'undefined') return true;
-        const stored = localStorage.getItem('pos-theme');
-        return stored ? stored === 'dark' : true;
-    });
-    const dark = isDarkMode;
-
-    useEffect(() => {
-        document.documentElement.classList.toggle('dark', isDarkMode);
-        localStorage.setItem('pos-theme', isDarkMode ? 'dark' : 'light');
-    }, [isDarkMode]);
+    const { isDarkMode: dark, toggleTheme } = useTheme();
 
     useEffect(() => {
         const t = setInterval(() => setCurrentTime(new Date()), 60000);
@@ -507,7 +498,7 @@ export default function Dashboard() {
                         <div className="flex items-center gap-2 flex-shrink-0">
                             {/* Theme toggle */}
                             <button
-                                onClick={() => setIsDarkMode((prev) => !prev)}
+                                onClick={toggleTheme}
                                 className={`
                                     flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-medium
                                     border transition-all duration-300
