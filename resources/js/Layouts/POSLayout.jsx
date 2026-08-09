@@ -12,16 +12,31 @@ import {
     X,
     UtensilsCrossed,
     LogOut,
+    BookOpen,
+    ShoppingBag,
+    Truck,
+    UserCheck,
+    Coins,
+    Store,
+    Sun,
+    Moon,
 } from 'lucide-react';
+import { useTheme } from '@/Components/ThemeProvider';
 
 const NAV_ITEMS = [
-    { href: '/dashboard',   label: 'Dashboard',   icon: LayoutDashboard },
-    { href: '/pos',         label: 'POS Billing', icon: ShoppingCart    },
-    { href: '/pos/tables',  label: 'Tables',      icon: Table2         },
-    { href: '/pos/kds',     label: 'Kitchen (KDS)', icon: ChefHat       },
-    { href: '/pos/inventory', label: 'Inventory', icon: Package        },
-    { href: '/pos/crm',     label: 'CRM',         icon: Users          },
-    { href: '/pos/reports', label: 'Reports',     icon: BarChart3      },
+    { href: '/dashboard',     label: 'Dashboard',     icon: LayoutDashboard },
+    { href: '/pos',           label: 'POS Billing',   icon: ShoppingCart    },
+    { href: '/pos/tables',    label: 'Tables',        icon: Table2          },
+    { href: '/pos/kds',       label: 'Kitchen (KDS)', icon: ChefHat         },
+    { href: '/pos/menu',      label: 'Menu Mgmt',     icon: BookOpen        },
+    { href: '/pos/inventory', label: 'Inventory',     icon: Package         },
+    { href: '/pos/purchases', label: 'Purchases',     icon: ShoppingBag     },
+    { href: '/pos/crm',       label: 'CRM',           icon: Users           },
+    { href: '/pos/delivery',  label: 'Delivery',      icon: Truck           },
+    { href: '/pos/staff',     label: 'Staff Mgmt',    icon: UserCheck       },
+    { href: '/pos/finance',   label: 'Financials',    icon: Coins           },
+    { href: '/pos/reports',   label: 'Reports',       icon: BarChart3       },
+    { href: '/pos/branches',  label: 'Branches',      icon: Store           },
 ];
 
 const NAV_BY_SPECIFICITY = [...NAV_ITEMS].sort((a, b) => b.href.split('/').length - a.href.split('/').length);
@@ -43,6 +58,7 @@ function initials(name) {
 export default function POSLayout({ children }) {
     const user = usePage().props.auth?.user ?? null;
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const { isDarkMode, toggleTheme } = useTheme();
 
     const handleLogout = (e) => {
         e.preventDefault();
@@ -123,6 +139,15 @@ export default function POSLayout({ children }) {
                 </nav>
 
                 <div className="px-3 py-4 border-t border-slate-200 dark:border-slate-800/80">
+                    <button
+                        onClick={toggleTheme}
+                        className="flex items-center justify-between px-3 py-2 text-xs text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors w-full rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/60 mb-3 border border-slate-200 dark:border-slate-800"
+                    >
+                        <span className="flex items-center gap-2 font-medium">
+                            {isDarkMode ? <Sun size={14} /> : <Moon size={14} />}
+                            {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+                        </span>
+                    </button>
                     <div className="flex items-center gap-3 px-3 py-2 mb-2 min-w-0">
                         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-xs font-bold text-white flex-shrink-0 shadow-lg shadow-indigo-500/30 ring-2 ring-indigo-500/20">
                             {initials(user?.name)}
@@ -145,19 +170,27 @@ export default function POSLayout({ children }) {
             {/* ── Main Content ────────────────────────────────────────── */}
             <div className="flex-1 flex flex-col overflow-hidden">
                 {/* Mobile header */}
-                <header className="lg:hidden flex items-center gap-3 px-4 py-3 bg-white dark:bg-slate-900/90 border-b border-slate-200 dark:border-slate-800/80 flex-shrink-0">
-                    <button
-                        onClick={() => setSidebarOpen(true)}
-                        className="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
-                    >
-                        <Menu size={22} />
-                    </button>
-                    <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 bg-indigo-600 rounded-lg flex items-center justify-center">
-                            <UtensilsCrossed size={14} className="text-white" />
+                <header className="lg:hidden flex items-center justify-between px-4 py-3 bg-white dark:bg-slate-900/90 border-b border-slate-200 dark:border-slate-800/80 flex-shrink-0">
+                    <div className="flex items-center gap-3">
+                        <button
+                            onClick={() => setSidebarOpen(true)}
+                            className="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                        >
+                            <Menu size={22} />
+                        </button>
+                        <div className="flex items-center gap-2">
+                            <div className="w-7 h-7 bg-indigo-600 rounded-lg flex items-center justify-center">
+                                <UtensilsCrossed size={14} className="text-white" />
+                            </div>
+                            <span className="text-slate-900 dark:text-white font-bold text-sm">Restaurant POS</span>
                         </div>
-                        <span className="text-slate-900 dark:text-white font-bold text-sm">Restaurant POS</span>
                     </div>
+                    <button
+                        onClick={toggleTheme}
+                        className="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white p-1.5 rounded-lg border border-slate-200 dark:border-slate-800"
+                    >
+                        {isDarkMode ? <Sun size={16} /> : <Moon size={16} />}
+                    </button>
                 </header>
 
                 <main className="flex-1 overflow-y-auto bg-slate-100 dark:bg-slate-950 transition-colors duration-300">
