@@ -1,5 +1,3 @@
-import './bootstrap';
-
 // ─── Theme (dark/light) ────────────────────────────────────────────
 const root = document.documentElement;
 const themeToggle = document.getElementById('theme-toggle');

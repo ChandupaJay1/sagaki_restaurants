@@ -13,6 +13,6 @@
     </head>
     <body class="font-sans">
         @yield('content')
-        @stack('scripts')
+        @yield('scripts')
     </body>
 </html>
