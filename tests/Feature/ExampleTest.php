@@ -2,11 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\Auth\HardcodedUserProvider;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * The root URL redirects guests to the authentication screen.
      */
@@ -19,6 +22,8 @@ class ExampleTest extends TestCase
 
     public function test_the_disclaimer_page_is_not_required(): void
     {
-        $this->actingAs(HardcodedUserProvider::user())->get('/')->assertRedirect(route('dashboard'));
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->get('/')->assertRedirect(route('dashboard'));
     }
 }

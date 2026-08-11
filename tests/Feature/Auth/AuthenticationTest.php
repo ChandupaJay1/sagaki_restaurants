@@ -2,11 +2,14 @@
 
 namespace Tests\Feature\Auth;
 
-use App\Auth\HardcodedUserProvider;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class AuthenticationTest extends TestCase
 {
+    use RefreshDatabase;
     public function test_login_screen_can_be_rendered(): void
     {
         $response = $this->get('/login');
@@ -16,9 +19,14 @@ class AuthenticationTest extends TestCase
 
     public function test_users_can_authenticate_using_the_login_screen(): void
     {
+        $user = User::factory()->create([
+            'email' => 'user@example.com',
+            'password' => Hash::make('password'),
+        ]);
+
         $response = $this->post('/login', [
-            'email' => HardcodedUserProvider::EMAIL,
-            'password' => HardcodedUserProvider::PASSWORD,
+            'email' => $user->email,
+            'password' => 'password',
         ]);
 
         $this->assertAuthenticated();
@@ -27,8 +35,13 @@ class AuthenticationTest extends TestCase
 
     public function test_users_can_not_authenticate_with_invalid_password(): void
     {
+        $user = User::factory()->create([
+            'email' => 'user@example.com',
+            'password' => Hash::make('password'),
+        ]);
+
         $this->post('/login', [
-            'email' => HardcodedUserProvider::EMAIL,
+            'email' => $user->email,
             'password' => 'wrong-password',
         ]);
 
@@ -39,7 +52,7 @@ class AuthenticationTest extends TestCase
     {
         $this->post('/login', [
             'email' => 'nobody@example.com',
-            'password' => HardcodedUserProvider::PASSWORD,
+            'password' => 'password',
         ]);
 
         $this->assertGuest();
@@ -47,7 +60,9 @@ class AuthenticationTest extends TestCase
 
     public function test_users_can_logout(): void
     {
-        $response = $this->actingAs(HardcodedUserProvider::user())->post('/logout');
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->post('/logout');
 
         $this->assertGuest();
         $response->assertRedirect('/login');

@@ -2,11 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\Auth\HardcodedUserProvider;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class PageSmokeTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * Every authenticated page must render without throwing an exception.
      */
@@ -23,8 +26,10 @@ class PageSmokeTest extends TestCase
             '/profile',
         ];
 
+        $user = User::factory()->create();
+
         foreach ($paths as $path) {
-            $response = $this->actingAs(HardcodedUserProvider::user())->get($path);
+            $response = $this->actingAs($user)->get($path);
 
             $response->assertOk();
         }
@@ -44,7 +49,9 @@ class PageSmokeTest extends TestCase
 
     public function test_authenticated_user_visiting_root_is_redirected_to_dashboard(): void
     {
-        $this->actingAs(HardcodedUserProvider::user())
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
             ->get('/')
             ->assertRedirect(route('dashboard'));
     }
