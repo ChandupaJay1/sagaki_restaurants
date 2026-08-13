@@ -250,6 +250,45 @@
     </div>
 </div>
 
+{{-- Add Customer Modal --}}
+<div id="add-customer-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" data-add-modal-close></div>
+    <div class="relative w-full max-w-md bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 rounded-2xl shadow-2xl overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-700/60 flex items-center justify-between">
+            <h2 class="text-slate-900 dark:text-white font-bold text-base">Add New Customer</h2>
+            <button type="button" data-add-modal-close class="text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
+                <x-icon name="x" size="18" />
+            </button>
+        </div>
+        <div class="px-6 py-5 space-y-4">
+            <div>
+                <label class="block text-slate-500 dark:text-slate-400 text-xs font-semibold mb-1">Name</label>
+                <input type="text" id="add-cust-name" placeholder="Name" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600/50 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500">
+            </div>
+            <div>
+                <label class="block text-slate-500 dark:text-slate-400 text-xs font-semibold mb-1">Phone</label>
+                <input type="text" id="add-cust-phone" placeholder="Phone e.g. 077-123-4567" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600/50 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500">
+            </div>
+            <div>
+                <label class="block text-slate-500 dark:text-slate-400 text-xs font-semibold mb-1">Email</label>
+                <input type="email" id="add-cust-email" placeholder="Email" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600/50 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500">
+            </div>
+            <div>
+                <label class="block text-slate-500 dark:text-slate-400 text-xs font-semibold mb-1">Favorite Dish</label>
+                <input type="text" id="add-cust-favorite" placeholder="Favorite Dish" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600/50 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500">
+            </div>
+            <div>
+                <label class="block text-slate-500 dark:text-slate-400 text-xs font-semibold mb-1">Notes</label>
+                <textarea id="add-cust-notes" rows="2" placeholder="Notes (allergies, seating preference...)" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600/50 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500 resize-none"></textarea>
+            </div>
+        </div>
+        <div class="px-6 py-4 border-t border-slate-200 dark:border-slate-700/60 flex items-center justify-end gap-2 bg-slate-50 dark:bg-slate-800">
+            <button type="button" data-add-modal-close class="px-4 py-2 text-slate-500 dark:text-slate-400 text-sm font-medium rounded-xl hover:text-slate-900">Cancel</button>
+            <button type="button" id="submit-add-customer" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-xl">Save</button>
+        </div>
+    </div>
+</div>
+
 {{-- Toast --}}
 <div id="crm-toast" class="hidden fixed bottom-6 right-6 z-50 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white text-sm font-medium px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2">
     <x-icon name="check" size="16" class="text-emerald-500 dark:text-emerald-400" />

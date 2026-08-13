@@ -118,67 +118,71 @@
                                 <div class="w-36"></div>
                             @else
                                 @php $config = $statusConfig[$table['status']]; @endphp
-                                <div class="w-36 flex justify-center">
-                                    <button type="button" data-table-card
-                                        data-id="{{ $table['id'] }}"
-                                        data-name="{{ $table['name'] }}"
-                                        data-type="{{ $table['type'] }}"
-                                        data-seats="{{ $table['seats'] }}"
-                                        data-status="{{ $table['status'] }}"
-                                        data-customer="{{ $table['customer'] ?? '' }}"
-                                        data-bill="{{ $table['bill'] }}"
-                                        data-startedat="{{ $table['startedAt'] ?? '' }}"
-                                        class="relative group bg-white dark:bg-slate-900/80 {{ $config['bg'] }} {{ $config['border'] }} border-2 rounded-2xl p-4 text-left transition-all duration-200 hover:shadow-lg hover:scale-105 active:scale-95 flex flex-col gap-2 w-full {{ $config['hover'] }}">
-                                        {{-- Status pill --}}
-                                        <div class="absolute top-3 right-3">
-                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold {{ $config['bg'] }} {{ $config['text'] }} border {{ $config['border'] }}">
-                                                <x-icon :name="$config['icon']" size="11" />
-                                                {{ $config['label'] }}
-                                            </span>
-                                        </div>
+                                <div class="w-36 flex">
+    <button type="button" data-table-card
+        data-id="{{ $table['id'] }}"
+        data-name="{{ $table['name'] }}"
+        data-type="{{ $table['type'] }}"
+        data-seats="{{ $table['seats'] }}"
+        data-status="{{ $table['status'] }}"
+        data-customer="{{ $table['customer'] ?? '' }}"
+        data-bill="{{ $table['bill'] }}"
+        data-startedat="{{ $table['startedAt'] ?? '' }}"
+        class="relative group bg-white dark:bg-slate-900/80 {{ $config['bg'] }} {{ $config['border'] }} border-2 rounded-2xl p-4 text-left transition-all duration-200 hover:shadow-lg hover:scale-105 active:scale-95 flex flex-col justify-between w-full h-[195px] overflow-hidden {{ $config['hover'] }}">
+        
+        <div class="relative z-10">
+            {{-- Status pill --}}
+            <div class="absolute -top-1 -right-1">
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold {{ $config['bg'] }} {{ $config['text'] }} border {{ $config['border'] }}">
+                    <x-icon :name="$config['icon']" size="11" />
+                    {{ $config['label'] }}
+                </span>
+            </div>
 
-                                        {{-- Table icon --}}
-                                        <div class="flex items-start justify-between pt-1">
-                                            <div class="w-10 h-10 rounded-xl flex items-center justify-center {{ $config['tileBg'] }}">
-                                                <x-icon name="table-2" size="20" class="{{ $config['tileText'] }}" />
-                                            </div>
-                                        </div>
+            {{-- Table icon --}}
+            <div class="flex items-start justify-between pt-1">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center {{ $config['tileBg'] }}">
+                    <x-icon name="table-2" size="20" class="{{ $config['tileText'] }}" />
+                </div>
+            </div>
 
-                                        {{-- Table info --}}
-                                        <div>
-                                            <p class="text-slate-900 dark:text-white font-bold text-lg leading-none">{{ $table['name'] }}</p>
-                                            <p class="text-slate-500 dark:text-slate-400 text-xs mt-1">{{ $table['seats'] }} seats · {{ str_replace('-', ' ', $table['type']) }}</p>
-                                        </div>
+            {{-- Table info --}}
+            <div class="mt-2">
+                <p class="text-slate-900 dark:text-white font-bold text-lg leading-none">{{ $table['name'] }}</p>
+                <p class="text-slate-500 dark:text-slate-400 text-xs mt-1">{{ $table['seats'] }} seats · {{ str_replace('-', ' ', $table['type']) }}</p>
+            </div>
+        </div>
 
-                                        {{-- Occupied info --}}
-                                        @if ($table['status'] === 'occupied')
-                                            <div class="pt-2 border-t border-slate-200 dark:border-white/10 mt-1 w-full">
-                                                <p class="text-slate-900 dark:text-white text-sm font-medium">{{ $table['customer'] }}</p>
-                                                <p class="text-slate-500 dark:text-slate-400 text-xs mt-0.5">Started {{ $table['startedAt'] }}</p>
-                                                <p class="text-indigo-600 dark:text-indigo-400 font-bold text-sm mt-1">LKR {{ number_format($table['bill']) }}</p>
-                                            </div>
-                                        @endif
+        {{-- Mid Section (Occupied / Reserved Info) --}}
+        <div class="relative z-10 mt-auto">
+            @if ($table['status'] === 'occupied')
+                <div class="pt-2 border-t border-slate-200 dark:border-white/10 mt-2 w-full">
+                    <p class="text-slate-900 dark:text-white text-sm font-medium">{{ $table['customer'] }}</p>
+                    <p class="text-slate-500 dark:text-slate-400 text-xs mt-0.5">Started {{ $table['startedAt'] }}</p>
+                    <p class="text-indigo-600 dark:text-indigo-400 font-bold text-sm mt-1">LKR {{ number_format($table['bill']) }}</p>
+                </div>
+            @endif
 
-                                        {{-- Reserved info --}}
-                                        @if ($table['status'] === 'reserved')
-                                            <div class="pt-2 border-t border-slate-200 dark:border-white/10 mt-1 w-full">
-                                                <p class="text-amber-600 dark:text-amber-400 text-sm font-medium">{{ $table['customer'] }}</p>
-                                                <p class="text-slate-500 dark:text-slate-400 text-xs mt-0.5">Reserved for {{ $table['startedAt'] }}</p>
-                                            </div>
-                                        @endif
+            @if ($table['status'] === 'reserved')
+                <div class="pt-2 border-t border-slate-200 dark:border-white/10 mt-2 w-full">
+                    <p class="text-amber-600 dark:text-amber-400 text-sm font-medium">{{ $table['customer'] }}</p>
+                    <p class="text-slate-500 dark:text-slate-400 text-xs mt-0.5">Reserved for {{ $table['startedAt'] }}</p>
+                </div>
+            @endif
+        </div>
 
-                                        {{-- Hover actions --}}
-                                        <div class="absolute inset-0 rounded-2xl bg-white/90 dark:bg-slate-900/80 backdrop-blur-sm flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                                            @if ($table['status'] === 'available')
-                                                <span class="text-emerald-600 dark:text-emerald-400 text-sm font-medium flex items-center gap-1"><x-icon name="plus" size="14" /> Take Order</span>
-                                            @elseif ($table['status'] === 'occupied')
-                                                <span class="text-slate-900 dark:text-white text-sm font-medium flex items-center gap-1"><x-icon name="utensils" size="14" /> View Order</span>
-                                            @else
-                                                <span class="text-amber-600 dark:text-amber-400 text-sm font-medium flex items-center gap-1"><x-icon name="circle-check" size="14" /> Seat Guest</span>
-                                            @endif
-                                        </div>
-                                    </button>
-                                </div>
+        {{-- Hover actions --}}
+        <div class="absolute bottom-0 left-0 w-full h-[50%] z-20 rounded-b-2xl bg-white/95 dark:bg-slate-900/90 backdrop-blur-sm flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            @if ($table['status'] === 'available')
+                <span class="text-emerald-600/80 dark:text-emerald-400/80 text-sm font-semibold flex items-center gap-1"><x-icon name="plus" size="14" /> Take Order</span>
+            @elseif ($table['status'] === 'occupied')
+                <span class="text-indigo-600/80 dark:text-indigo-400/80 text-sm font-semibold flex items-center gap-1"><x-icon name="utensils" size="14" /> View Order</span>
+            @else
+                <span class="text-amber-600/80 dark:text-amber-400/80 text-sm font-semibold flex items-center gap-1"><x-icon name="circle-check" size="14" /> Seat Guest</span>
+            @endif
+        </div>
+    </button>
+</div>
                             @endif
                         @endforeach
                     </div>

@@ -7,14 +7,15 @@
     $data = $salesData['today'] ?? [];
 
     $maxRevenue = max(array_column($data, 'revenue') ?: [1]);
+    $maxRevenue = $maxRevenue > 0 ? $maxRevenue : 1;
     $peak = collect($data)->sortByDesc('revenue')->first();
 
     $totalRevenue = array_sum(array_column($data, 'revenue'));
     $totalOrders = array_sum(array_column($data, 'orders'));
     $totalCost = (int) round($totalRevenue * 0.38);
     $profit = $totalRevenue - $totalCost;
-    $profitMargin = number_format(($profit / $totalRevenue) * 100, 1);
-    $avgOrder = (int) round($totalRevenue / $totalOrders);
+    $profitMargin = $totalRevenue > 0 ? number_format(($profit / $totalRevenue) * 100, 1) : '0.0';
+    $avgOrder = $totalOrders > 0 ? (int) round($totalRevenue / $totalOrders) : 0;
 
     $paymentBreakdown = [
         ['method' => 'Card',   'amount' => 85400, 'pct' => 60],
@@ -104,7 +105,7 @@
                         </div>
                         <div>
                             <h2 class="text-slate-900 dark:text-white font-bold text-sm">Revenue Trend</h2>
-                            <p class="text-slate-500 dark:text-slate-400 text-xs">Peak: {{ $peak['label'] }} — LKR {{ number_format($peak['revenue']) }}</p>
+                            <p class="text-slate-500 dark:text-slate-400 text-xs">Peak: {{ $peak ? $peak['label'] : 'N/A' }} — LKR {{ number_format($peak ? $peak['revenue'] : 0) }}</p>
                         </div>
                     </div>
                 </div>
@@ -120,7 +121,7 @@
                         @foreach ($data as $i => $d)
                             <div class="flex-1 flex flex-col items-center gap-1">
                                 <div class="w-full flex justify-center" style="height: 160px">
-                                    @if ($d['revenue'] === $peak['revenue'])
+                                    @if ($peak && $d['revenue'] === $peak['revenue'])
                                         <div class="w-full max-w-[44px] rounded-t-md bg-gradient-to-t from-indigo-600 to-indigo-400 shadow-lg shadow-indigo-500/30 fg-bar-anim" style="height: {{ ($d['revenue'] / $maxRevenue) * 100 }}%; animation-delay: {{ $i * 0.05 }}s"></div>
                                     @else
                                         <div class="w-full max-w-[44px] rounded-t-md bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 transition-colors duration-500 fg-bar-anim" style="height: {{ ($d['revenue'] / $maxRevenue) * 100 }}%; animation-delay: {{ $i * 0.05 }}s"></div>
@@ -128,8 +129,8 @@
                                 </div>
                                 <span @class([
                                     'text-xs font-semibold whitespace-nowrap',
-                                    'text-indigo-600 dark:text-indigo-400' => $d['revenue'] === $peak['revenue'],
-                                    'text-slate-400 dark:text-slate-500' => $d['revenue'] !== $peak['revenue'],
+                                    'text-indigo-600 dark:text-indigo-400' => $peak && $d['revenue'] === $peak['revenue'],
+                                    'text-slate-400 dark:text-slate-500' => !$peak || $d['revenue'] !== $peak['revenue'],
                                 ])>{{ $d['label'] }}</span>
                             </div>
                         @endforeach
@@ -181,7 +182,7 @@
                 </div>
                 <div class="space-y-3" data-cost-rows>
                     @foreach ($data as $d)
-                        @php $costPct = isset($d['cost']) ? (int) round(($d['cost'] / $d['revenue']) * 100) : 38; @endphp
+                        @php $costPct = isset($d['cost']) && $d['revenue'] > 0 ? (int) round(($d['cost'] / $d['revenue']) * 100) : 38; @endphp
                         <div class="flex items-center gap-3">
                             <span class="text-slate-500 dark:text-slate-400 text-xs w-12 flex-shrink-0">{{ $d['label'] }}</span>
                             <div class="flex-1 flex gap-1 items-center">
@@ -195,7 +196,7 @@
                 <div class="flex items-center gap-6 mt-4 pt-4 border-t border-slate-200 dark:border-slate-700/40">
                     <div class="flex items-center gap-2">
                         <span class="w-3 h-3 rounded-sm bg-red-500/60"></span>
-                        <span class="text-slate-500 dark:text-slate-400 text-xs">Cost ({{ (int) round(($totalCost / $totalRevenue) * 100) }}%)</span>
+                        <span class="text-slate-500 dark:text-slate-400 text-xs">Cost ({{ $totalRevenue > 0 ? (int) round(($totalCost / $totalRevenue) * 100) : 0 }}%)</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="w-3 h-3 rounded-sm bg-emerald-500/60"></span>

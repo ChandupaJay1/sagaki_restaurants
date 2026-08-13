@@ -228,28 +228,54 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── Actions ──────────────────────────────────────────────────────
     function handleAction(action, data) {
         closeModal();
-        switch (action) {
-            case 'take-order':
-                showToast('Order started at ' + data.name);
-                break;
-            case 'add-bill':
-                showToast('Payment added to ' + data.name);
-                break;
-            case 'close-table':
-                showToast(data.name + ' has been closed');
-                break;
-            case 'seat-guest':
-                showToast(data.customer + ' seated at ' + data.name);
-                break;
-            case 'transfer':
-                showToast(data.name + ' → ' + data.target);
-                break;
-            case 'merge':
-                showToast(data.name + ' merged with ' + data.target);
-                break;
-            default:
-                break;
+
+        if (action === 'take-order') {
+            window.location.href = `/pos?table=${data.name}`;
+            return;
         }
+        
+        if (action === 'add-bill') {
+            window.location.href = `/pos?table=${data.name}`;
+            return;
+        }
+
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        let payload = {
+            action: action,
+            table_id: data.id
+        };
+
+        if (action === 'seat-guest') {
+            const guestName = prompt('Enter guest name:', data.customer || 'Guest');
+            if (guestName === null) return;
+            payload.customer_name = guestName;
+        } else if (action === 'transfer') {
+            payload.target_table_name = data.transferTo;
+        } else if (action === 'merge') {
+            payload.target_table_name = data.target;
+        }
+
+        fetch('/pos/tables/action', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': token
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(resData => {
+            if (resData.success) {
+                showToast(resData.message);
+                setTimeout(() => window.location.reload(), 1000);
+            } else {
+                showToast(resData.message, 'error');
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            showToast('Action failed', 'error');
+        });
     }
 
     // ── Card click ───────────────────────────────────────────────────

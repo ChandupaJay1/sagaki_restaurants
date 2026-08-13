@@ -200,6 +200,62 @@ const init = () => {
         });
     }
 
+    const adjustQty = (id, action) => {
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        fetch('/pos/inventory/adjust', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': token
+            },
+            body: JSON.stringify({ id, action })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                const item = items.find(entry => entry.id === id);
+                if (item) {
+                    item.qty = data.qty;
+                    item.status = data.status;
+                    render();
+                }
+            } else {
+                showToast('Failed to adjust stock');
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            showToast('Stock adjustment error');
+        });
+    };
+
+    const deleteItem = (id) => {
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        fetch(`/pos/inventory/delete/${id}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': token
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                const item = items.find(entry => entry.id === id);
+                if (item) {
+                    items.splice(items.indexOf(item), 1);
+                    render();
+                    showToast('Item deleted successfully');
+                }
+            } else {
+                showToast('Failed to delete item');
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            showToast('Error deleting item');
+        });
+    };
+
     if (tbody) {
         tbody.addEventListener('click', (event) => {
             const button = event.target.closest('[data-action]');
@@ -210,20 +266,18 @@ const init = () => {
 
             switch (button.getAttribute('data-action')) {
                 case 'inc':
-                    item.qty += 1;
-                    render();
+                    adjustQty(id, 'inc');
                     break;
                 case 'dec':
-                    item.qty = Math.max(0, item.qty - 1);
-                    render();
+                    adjustQty(id, 'dec');
                     break;
                 case 'edit':
                     showToast(`Editing ${item.name}`);
                     break;
                 case 'delete':
-                    items.splice(items.indexOf(item), 1);
-                    render();
-                    showToast('Item removed');
+                    if (confirm(`Are you sure you want to delete ${item.name}?`)) {
+                        deleteItem(id);
+                    }
                     break;
             }
         });
@@ -255,25 +309,48 @@ const init = () => {
                 return;
             }
 
-            const today = new Date().toISOString().split('T')[0];
-            items.unshift({
-                id: Date.now(),
-                name,
-                category: categoryEl ? categoryEl.value : 'proteins',
-                qty,
-                unit: unitEl ? unitEl.value : 'kg',
-                minQty,
-                price,
-                supplier,
-                lastOrder: today,
-                status: 'ok',
+            const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            
+            fetch('/pos/inventory/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': token
+                },
+                body: JSON.stringify({
+                    name,
+                    category: categoryEl ? categoryEl.value : 'proteins',
+                    unit: unitEl ? unitEl.value : 'kg',
+                    qty,
+                    min_qty: minQty,
+                    price,
+                    supplier
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    items.unshift(data.item);
+                    closeAddModal();
+                    activeCat = 'all';
+                    setActiveChips();
+                    render();
+                    showToast('Item added successfully');
+                    
+                    // Reset fields
+                    if (nameEl) nameEl.value = '';
+                    if (qtyEl) qtyEl.value = '';
+                    if (minQtyEl) minQtyEl.value = '';
+                    if (priceEl) priceEl.value = '';
+                    if (supplierEl) supplierEl.value = '';
+                } else {
+                    showToast('Failed to add item');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                showToast('Failed to add item');
             });
-
-            closeAddModal();
-            activeCat = 'all';
-            setActiveChips();
-            render();
-            showToast('Item added successfully');
         });
     }
 

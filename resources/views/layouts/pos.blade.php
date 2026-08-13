@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>@yield('title', config('app.name', 'Sagaki Restaurant POS'))</title>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600|inter:400,500,600,700&display=swap" rel="stylesheet" />
@@ -33,9 +34,15 @@
                 ['name' => 'pos.index',        'label' => 'POS Billing',   'icon' => 'shopping-cart',  'route' => 'pos.index',     'active' => request()->routeIs('pos.index')],
                 ['name' => 'pos.tables',       'label' => 'Tables',        'icon' => 'table-2',        'route' => 'pos.tables',    'active' => request()->routeIs('pos.tables')],
                 ['name' => 'pos.kds',          'label' => 'Kitchen (KDS)', 'icon' => 'chef-hat',       'route' => 'pos.kds',       'active' => request()->routeIs('pos.kds')],
+                ['name' => 'pos.menu',         'label' => 'Menu Manager',  'icon' => 'utensils',        'route' => 'pos.menu',      'active' => request()->routeIs('pos.menu')],
                 ['name' => 'pos.inventory',    'label' => 'Inventory',     'icon' => 'package',        'route' => 'pos.inventory', 'active' => request()->routeIs('pos.inventory')],
+                ['name' => 'pos.purchases',    'label' => 'Purchases',     'icon' => 'shopping-bag',    'route' => 'pos.purchases', 'active' => request()->routeIs('pos.purchases')],
                 ['name' => 'pos.crm',          'label' => 'CRM',            'icon' => 'users',          'route' => 'pos.crm',       'active' => request()->routeIs('pos.crm')],
+                ['name' => 'pos.delivery',     'label' => 'Delivery',       'icon' => 'truck',          'route' => 'pos.delivery',  'active' => request()->routeIs('pos.delivery')],
+                ['name' => 'pos.staff',        'label' => 'Staff Manager',  'icon' => 'contact',        'route' => 'pos.staff',     'active' => request()->routeIs('pos.staff')],
+                ['name' => 'pos.financial',    'label' => 'Financials',     'icon' => 'wallet',          'route' => 'pos.financial', 'active' => request()->routeIs('pos.financial')],
                 ['name' => 'pos.reports',      'label' => 'Reports',       'icon' => 'bar-chart-3',    'route' => 'pos.reports',   'active' => request()->routeIs('pos.reports')],
+                ['name' => 'pos.branches',     'label' => 'Multi Branch',   'icon' => 'git-fork',        'route' => 'pos.branches',  'active' => request()->routeIs('pos.branches')],
             ];
         @endphp
 
