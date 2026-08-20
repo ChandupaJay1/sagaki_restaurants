@@ -1,9 +1,7 @@
 // POS Billing checkout page — vanilla JS (no React/Inertia).
-// Category tabs filter the menu; clicking an item adds it to the cart
-// (qty, price); +/- and remove in cart; live subtotal, 10% service
-// charge, total; Print KOT / Checkout are placeholders (no backend).
+// Dynamically connected to Laravel backend database endpoints.
 
-const CATEGORIES = [
+const CATEGORIES = window.POS_CATEGORIES || [
     { id: 'all', label: 'All Items', icon: 'utensils' },
     { id: 'kottu', label: 'Kottu', icon: 'flame' },
     { id: 'rice', label: 'Rice & Curry', icon: 'chef-hat' },
@@ -13,55 +11,9 @@ const CATEGORIES = [
     { id: 'desserts', label: 'Desserts', icon: 'ice-cream' },
 ];
 
-const MENU_ITEMS = [
-    // Kottu
+const MENU_ITEMS = window.POS_MENU_ITEMS || [
     { id: 1, name: 'Chicken Kottu', category: 'kottu', price: 850, emoji: '🍛', tags: ['spicy'] },
     { id: 2, name: 'Egg Kottu', category: 'kottu', price: 700, emoji: '🍳', tags: [] },
-    { id: 3, name: 'Fish Kottu', category: 'kottu', price: 950, emoji: '🐟', tags: ['spicy'] },
-    { id: 4, name: 'Veg Kottu', category: 'kottu', price: 600, emoji: '🥬', tags: ['vegan'] },
-    { id: 5, name: 'Mutton Kottu', category: 'kottu', price: 1200, emoji: '🍖', tags: ['spicy'] },
-    { id: 6, name: 'Cheese Kottu', category: 'kottu', price: 900, emoji: '🧀', tags: [] },
-    // Rice & Curry
-    { id: 7, name: 'Chicken Curry Rice', category: 'rice', price: 850, emoji: '🍛', tags: ['spicy'] },
-    { id: 8, name: 'Lamprais', category: 'rice', price: 950, emoji: '📦', tags: [] },
-    { id: 9, name: 'Fish Ambul Thiyal', category: 'rice', price: 1100, emoji: '🐟', tags: ['spicy'] },
-    { id: 10, name: 'Red Rice & Curry', category: 'rice', price: 750, emoji: '🍚', tags: ['spicy'] },
-    { id: 11, name: 'Jaffna Crab Curry', category: 'rice', price: 1500, emoji: '🦀', tags: ['spicy'] },
-    { id: 12, name: 'Coconut Rice', category: 'rice', price: 600, emoji: '🥥', tags: [] },
-    { id: 13, name: 'Prawn Curry Rice', category: 'rice', price: 1300, emoji: '🦐', tags: ['spicy'] },
-    { id: 14, name: 'Hoppers (3 pcs)', category: 'rice', price: 450, emoji: '🥞', tags: [] },
-    { id: 15, name: 'String Hoppers (4 pcs)', category: 'rice', price: 500, emoji: '🍜', tags: [] },
-    // Short Eats
-    { id: 16, name: 'Roti with Curry', category: 'shortEats', price: 350, emoji: '🫓', tags: [] },
-    { id: 17, name: 'Cutlet (3 pcs)', category: 'shortEats', price: 450, emoji: '🥟', tags: ['spicy'] },
-    { id: 18, name: 'Prawn Rolls (4 pcs)', category: 'shortEats', price: 650, emoji: '🦐', tags: [] },
-    { id: 19, name: 'Fish Bankura', category: 'shortEats', price: 550, emoji: '🐟', tags: ['spicy'] },
-    { id: 20, name: 'Chicken 65', category: 'shortEats', price: 600, emoji: '🍗', tags: ['spicy'] },
-    { id: 21, name: 'Momo (6 pcs)', category: 'shortEats', price: 750, emoji: '🥟', tags: [] },
-    { id: 22, name: 'Veg Spring Roll (3 pcs)', category: 'shortEats', price: 400, emoji: '🌯', tags: ['vegan'] },
-    { id: 23, name: 'Samosa (2 pcs)', category: 'shortEats', price: 300, emoji: '🥟', tags: ['vegan'] },
-    // Beverages
-    { id: 24, name: 'Ceylon Tea', category: 'beverages', price: 150, emoji: '🍵', tags: [] },
-    { id: 25, name: 'Iced Tea', category: 'beverages', price: 250, emoji: '🧊', tags: [] },
-    { id: 26, name: 'Fresh Lime Soda', category: 'beverages', price: 300, emoji: '🍋', tags: [] },
-    { id: 27, name: 'Coconut Water', category: 'beverages', price: 200, emoji: '🥥', tags: ['vegan'] },
-    { id: 28, name: 'Milk Shake', category: 'beverages', price: 450, emoji: '🥤', tags: [] },
-    { id: 29, name: 'Fresh Juice', category: 'beverages', price: 350, emoji: '🧃', tags: ['vegan'] },
-    { id: 30, name: 'Espresso', category: 'beverages', price: 280, emoji: '☕', tags: [] },
-    // Drinks
-    { id: 31, name: 'Coca-Cola', category: 'drinks', price: 200, emoji: '🥤', tags: [] },
-    { id: 32, name: 'Fanta', category: 'drinks', price: 200, emoji: '🍊', tags: [] },
-    { id: 33, name: 'Sprite', category: 'drinks', price: 200, emoji: '🧃', tags: [] },
-    { id: 34, name: 'Red Bull', category: 'drinks', price: 450, emoji: '⚡', tags: [] },
-    { id: 35, name: 'Heineken', category: 'drinks', price: 700, emoji: '🍺', tags: [] },
-    { id: 36, name: 'King Lager', category: 'drinks', price: 550, emoji: '🍺', tags: [] },
-    // Desserts
-    { id: 37, name: 'Watalappan', category: 'desserts', price: 350, emoji: '🍮', tags: [] },
-    { id: 38, name: 'Halawa', category: 'desserts', price: 250, emoji: '🍮', tags: [] },
-    { id: 39, name: 'Ice Cream (2 scoops)', category: 'desserts', price: 400, emoji: '🍨', tags: [] },
-    { id: 40, name: 'Chocolate Lava Cake', category: 'desserts', price: 550, emoji: '🍫', tags: [] },
-    { id: 41, name: 'Pineapple Torte', category: 'desserts', price: 450, emoji: '🍍', tags: [] },
-    { id: 42, name: 'Sticky Toffee Pudding', category: 'desserts', price: 500, emoji: '🍰', tags: [] },
 ];
 
 const SERVICE_CHARGE_RATE = 0.10;
@@ -69,20 +21,18 @@ const SERVICE_CHARGE_RATE = 0.10;
 const fmtLKR = (amount) =>
     'LKR ' + new Intl.NumberFormat('en-LK', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(amount);
 
-// Small inline SVG icons for the JS-built cart rows (path data mirrors
-// resources/views/components/icon.blade.php).
 const ICON_PATHS = {
     minus: ['M5 12h14'],
     plus: ['M5 12h14', 'M12 5v14'],
     trash: ['M3 6h18', 'M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2', 'M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6', 'M10 11v6', 'M14 11v6'],
 };
+
 const svgIcon = (name, size) =>
     '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size +
     '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
     ICON_PATHS[name].map((d) => '<path d="' + d + '"></path>').join('') +
     '</svg>';
 
-// ── State-dependent class tokens (fully spelled out literal classes) ──
 const TAB_ACTIVE = ['bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-500/30', 'ring-1', 'ring-indigo-400/50', 'border-transparent'];
 const TAB_INACTIVE = ['bg-slate-200/50', 'dark:bg-slate-700/50', 'text-slate-700', 'dark:text-slate-300', 'hover:bg-slate-200', 'dark:hover:bg-slate-700', 'hover:text-slate-900', 'dark:hover:text-white', 'border-slate-200', 'dark:border-slate-600/40'];
 
@@ -135,6 +85,25 @@ document.addEventListener('DOMContentLoaded', () => {
     let kotPrinted = false;
     let cart = []; // [{ item, qty }]
 
+    let selectedPayment = 'Cash';
+    const paymentButtons = document.querySelectorAll('[data-payment-method]');
+    paymentButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            selectedPayment = btn.dataset.paymentMethod;
+            paymentButtons.forEach(b => {
+                b.classList.remove('border-indigo-650', 'bg-indigo-600/10', 'text-indigo-600', 'dark:text-indigo-400');
+                b.classList.add('border-slate-200', 'dark:border-slate-700', 'text-slate-500');
+            });
+            btn.classList.add('border-indigo-650', 'bg-indigo-600/10', 'text-indigo-600', 'dark:text-indigo-400');
+            btn.classList.remove('border-slate-200', 'dark:border-slate-700', 'text-slate-500');
+        });
+    });
+
+    const discountInput = $('discount-pct');
+    if (discountInput) {
+        discountInput.addEventListener('input', renderCart);
+    }
+
     // ── Cart actions ──────────────────────────────────────────────────
     function addToCartById(id) {
         const item = MENU_ITEMS.find((i) => i.id === id);
@@ -178,6 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
         kotPrinted = false;
         tableNumberInput.value = '';
         orderNoteEl.value = '';
+        if (discountInput) discountInput.value = '';
         renderCart();
         renderCartSubtitle();
     }
@@ -210,8 +180,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderCart() {
         const subtotal = cart.reduce((sum, c) => sum + c.item.price * c.qty, 0);
-        const serviceCharge = subtotal * SERVICE_CHARGE_RATE;
-        const total = subtotal + serviceCharge;
+        const isDineIn = orderType === 'dine-in';
+        const serviceCharge = isDineIn ? (subtotal * SERVICE_CHARGE_RATE) : 0;
+        const discountPct = Number(discountInput ? discountInput.value : 0);
+        const discount = subtotal * (discountPct / 100);
+        const total = Math.max(0, subtotal + serviceCharge - discount);
         const totalItems = cart.reduce((sum, c) => sum + c.qty, 0);
         const hasItems = cart.length > 0;
 
@@ -241,6 +214,30 @@ document.addEventListener('DOMContentLoaded', () => {
         cartCountEl.classList.toggle('hidden', totalItems === 0);
         cartCountEl.textContent = String(totalItems);
         serviceRow.classList.toggle('hidden', serviceCharge <= 0);
+
+        // Show/hide CRM & Discount inputs
+        $('customer-select-wrap').classList.toggle('hidden', !hasItems);
+        $('discount-wrap').classList.toggle('hidden', !hasItems);
+        $('payment-wrap').classList.toggle('hidden', !hasItems);
+
+        const splitBillBtn = $('split-bill-btn');
+        const printInvoiceBtn = $('print-invoice-btn');
+        if (splitBillBtn) {
+            splitBillBtn.disabled = !hasItems;
+            splitBillBtn.classList.toggle('opacity-50', !hasItems);
+            splitBillBtn.classList.toggle('cursor-not-allowed', !hasItems);
+        }
+        if (printInvoiceBtn) {
+            printInvoiceBtn.disabled = !hasItems;
+            printInvoiceBtn.classList.toggle('opacity-50', !hasItems);
+            printInvoiceBtn.classList.toggle('cursor-not-allowed', !hasItems);
+        }
+
+        const discountRow = $('discount-row');
+        if (discountRow) {
+            discountRow.classList.toggle('hidden', discount <= 0);
+            $('cart-discount').textContent = '-' + fmtLKR(discount);
+        }
 
         cartSubtotalEl.textContent = fmtLKR(subtotal);
         cartServiceEl.textContent = fmtLKR(serviceCharge);
@@ -297,6 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         tableWrap.classList.toggle('hidden', type !== 'dine-in');
         renderCartSubtitle();
+        renderCart();
     }
 
     orderButtons.forEach((btn) => btn.addEventListener('click', () => setOrderType(btn.dataset.orderType)));
@@ -346,20 +344,130 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── Clear cart ────────────────────────────────────────────────────
     clearBtn.addEventListener('click', resetOrder);
 
-    // ── Placeholder actions (no backend) ──────────────────────────────
+    // ── Split Billing ─────────────────────────────────────────────────
+    const splitBillBtn = $('split-bill-btn');
+    if (splitBillBtn) {
+        splitBillBtn.addEventListener('click', () => {
+            if (cart.length === 0) return;
+            const count = prompt('How many people to split the bill between?', '2');
+            if (count && !isNaN(count) && count > 0) {
+                const subtotal = cart.reduce((sum, c) => sum + c.item.price * c.qty, 0);
+                const isDineIn = orderType === 'dine-in';
+                const serviceCharge = isDineIn ? (subtotal * SERVICE_CHARGE_RATE) : 0;
+                const discountPct = Number(discountInput ? discountInput.value : 0);
+                const discount = subtotal * (discountPct / 100);
+                const total = Math.max(0, subtotal + serviceCharge - discount);
+                const splitAmt = total / count;
+                alert(`Split Bill Summary:\nNumber of people: ${count}\nEach person pays: ${fmtLKR(splitAmt)}`);
+            }
+        });
+    }
+
+    // ── Bill PDF Invoice Generator ────────────────────────────────────
+    const printInvoiceBtn = $('print-invoice-btn');
+    if (printInvoiceBtn) {
+        printInvoiceBtn.addEventListener('click', () => {
+            if (cart.length === 0) return;
+            const subtotal = cart.reduce((sum, c) => sum + c.item.price * c.qty, 0);
+            const isDineIn = orderType === 'dine-in';
+            const serviceCharge = isDineIn ? (subtotal * SERVICE_CHARGE_RATE) : 0;
+            const discountPct = Number(discountInput ? discountInput.value : 0);
+            const discount = subtotal * (discountPct / 100);
+            const total = Math.max(0, subtotal + serviceCharge - discount);
+            
+            let receiptText = `=== SAGAKI RESTAURANT ===\n`;
+            receiptText += `Date: ${new Date().toLocaleString()}\n`;
+            receiptText += `Order Type: ${orderType.toUpperCase()}\n`;
+            if (orderType === 'dine-in' && tableNumber) receiptText += `Table: ${tableNumber}\n`;
+            receiptText += `------------------------------\n`;
+            cart.forEach(c => {
+                receiptText += `${c.item.name.padEnd(20)} x${c.qty} : ${fmtLKR(c.item.price * c.qty)}\n`;
+            });
+            receiptText += `------------------------------\n`;
+            receiptText += `Subtotal: ${fmtLKR(subtotal)}\n`;
+            if (serviceCharge > 0) receiptText += `Service Charge (10%): ${fmtLKR(serviceCharge)}\n`;
+            if (discount > 0) receiptText += `Discount (${discountPct}%): -${fmtLKR(discount)}\n`;
+            receiptText += `==============================\n`;
+            receiptText += `Grand Total: ${fmtLKR(total)}\n`;
+            receiptText += `Payment Mode: ${selectedPayment}\n`;
+            receiptText += `==============================\n`;
+            receiptText += `Thank you! Please come again!`;
+            
+            const win = window.open("", "Receipt", "width=400,height=600");
+            win.document.write(`<pre style="font-family:monospace; font-size:14px; padding:20px; line-height: 1.5;">${receiptText}</pre>`);
+            win.document.close();
+            win.print();
+        });
+    }
+
+    // ── KOT / Checkout AJAX Actions ──────────────────────────────────
+    function submitOrder(action) {
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const discountPct = Number(discountInput ? discountInput.value : 0);
+        const subtotal = cart.reduce((sum, c) => sum + c.item.price * c.qty, 0);
+        const discount = subtotal * (discountPct / 100);
+
+        const payload = {
+            order_type: orderType,
+            table_number: tableNumber,
+            note: orderNote,
+            items: cart.map(c => ({ id: c.item.id, qty: c.qty })),
+            payment_method: selectedPayment,
+            discount: discount,
+            customer_id: $('customer-select').value || null,
+            action: action
+        };
+
+        printBtn.disabled = true;
+        checkoutBtn.disabled = true;
+
+        fetch('/pos/orders', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': token
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert(`${action === 'checkout' ? 'Checkout' : 'KOT'} successful!\nOrder ID: ${data.order_id}`);
+                resetOrder();
+            } else {
+                alert('Order failed: ' + data.message);
+                printBtn.disabled = false;
+                checkoutBtn.disabled = false;
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('An error occurred during submission.');
+            printBtn.disabled = false;
+            checkoutBtn.disabled = false;
+        });
+    }
+
     printBtn.addEventListener('click', () => {
         if (cart.length === 0) return;
-        kotPrinted = true;
-        renderCart();
+        submitOrder('kot');
     });
 
     checkoutBtn.addEventListener('click', () => {
         if (cart.length === 0) return;
-        resetOrder();
+        submitOrder('checkout');
     });
 
     // ── Init ──────────────────────────────────────────────────────────
     setOrderType(orderType);
     setCategory(activeCategory);
     renderCart();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlTable = urlParams.get('table');
+    if (urlTable) {
+        tableNumber = urlTable;
+        tableNumberInput.value = urlTable;
+        renderCartSubtitle();
+    }
 });

@@ -6,19 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class MenuItem extends Model
+class InventoryItem extends Model
 {
-    protected $fillable = ['category_id', 'name', 'price', 'emoji', 'tags', 'is_available', 'barcode'];
+    protected $fillable = ['branch_id', 'name', 'category', 'qty', 'unit', 'min_qty', 'price', 'supplier', 'last_order', 'status'];
 
     protected $casts = [
-        'tags' => 'array',
-        'is_available' => 'boolean',
+        'qty' => 'decimal:2',
+        'min_qty' => 'decimal:2',
         'price' => 'decimal:2',
+        'last_order' => 'date',
     ];
 
-    public function category(): BelongsTo
+    public function branch(): BelongsTo
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Branch::class);
     }
 
     public function recipes(): HasMany

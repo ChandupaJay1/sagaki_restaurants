@@ -2,70 +2,58 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
-    use HasFactory;
+    // The ID is a custom string, e.g. ORD-142
+    protected $primaryKey = 'id';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
-        'order_number',
-        'table_id',
-        'reservation_id',
-        'user_id',
-        'status',
-        'priority',
-        'subtotal',
-        'service_charge',
-        'total',
-        'discount',
-        'notes',
+        'id', 'branch_id', 'table_id', 'customer_id', 'order_type', 
+        'status', 'payment_method', 'note', 'subtotal', 
+        'service_charge', 'discount', 'total', 'cashier_id'
     ];
 
-    protected function casts(): array
+    protected $casts = [
+        'subtotal' => 'decimal:2',
+        'service_charge' => 'decimal:2',
+        'discount' => 'decimal:2',
+        'total' => 'decimal:2',
+    ];
+
+    public function branch(): BelongsTo
     {
-        return [
-            'subtotal' => 'decimal:2',
-            'service_charge' => 'decimal:2',
-            'total' => 'decimal:2',
-            'discount' => 'decimal:2',
-        ];
+        return $this->belongsTo(Branch::class);
     }
 
-    public function table()
+    public function table(): BelongsTo
     {
-        return $this->belongsTo(RestaurantTable::class, 'table_id');
+        return $this->belongsTo(Table::class);
     }
 
-    public function reservation()
+    public function customer(): BelongsTo
     {
-        return $this->belongsTo(Reservation::class);
+        return $this->belongsTo(Customer::class);
     }
 
-    public function user()
+    public function cashier(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'cashier_id');
     }
 
-    public function items()
+    public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class);
     }
 
-    public static function generateOrderNumber(): string
+    public function delivery(): HasOne
     {
-        $date = now()->format('Ymd');
-        $lastOrder = self::where('order_number', 'like', "ORD-{$date}-%")
-            ->orderByDesc('order_number')
-            ->first();
-
-        if ($lastOrder) {
-            $sequence = (int) substr($lastOrder->order_number, -4) + 1;
-        } else {
-            $sequence = 1;
-        }
-
-        return sprintf("ORD-%s-%04d", $date, $sequence);
+        return $this->hasOne(Delivery::class);
     }
 }

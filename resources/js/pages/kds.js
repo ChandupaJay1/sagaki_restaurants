@@ -92,27 +92,47 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── Advance: move card to next column + restyle ───────────────────
     function advance(card) {
+        const orderId = card.getAttribute('data-id');
         const current = card.getAttribute('data-status');
         const next = STATUS_FLOW[current] || current;
+        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-        card.setAttribute('data-status', next);
+        fetch('/pos/kds/advance', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': token
+            },
+            body: JSON.stringify({ order_id: orderId, status: next })
+        })
+        .then(res => res.json())
+        .then(resData => {
+            if (resData.success) {
+                card.setAttribute('data-status', next);
 
-        const from = columns[current];
-        const to = columns[next];
-        if (to) {
-            (from || document.body).removeChild(card);
-            to.appendChild(card);
-        }
+                const from = columns[current];
+                const to = columns[next];
+                if (to) {
+                    if (from && from.contains(card)) from.removeChild(card);
+                    to.appendChild(card);
+                }
 
-        paintStatus(card, next);
-        refreshCounts();
+                paintStatus(card, next);
+                refreshCounts();
 
-        // Flash overlay pulse to signal the move.
-        const flash = document.getElementById('kds-flash');
-        if (flash) {
-            flash.classList.remove('hidden');
-            setTimeout(() => flash.classList.add('hidden'), 300);
-        }
+                const flash = document.getElementById('kds-flash');
+                if (flash) {
+                    flash.classList.remove('hidden');
+                    setTimeout(() => flash.classList.add('hidden'), 300);
+                }
+            } else {
+                alert('Failed to update order: ' + resData.message);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('An error occurred updating the order status.');
+        });
     }
 
     function paintStatus(card, status) {

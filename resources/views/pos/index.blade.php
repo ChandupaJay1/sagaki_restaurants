@@ -158,9 +158,39 @@
         </div>
 
         {{-- Order Note --}}
-        <div id="order-note-wrap" class="hidden px-5 pt-2 pb-3 border-t border-slate-200/80 dark:border-slate-800/40">
+        <div id="order-note-wrap" class="hidden px-5 pt-2 pb-2.5 border-t border-slate-200/80 dark:border-slate-800/40">
             <textarea id="order-note" rows="2" placeholder="Order note (allergies, preferences...)"
                 class="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500 resize-none transition-colors"></textarea>
+        </div>
+
+        {{-- Customer Selector --}}
+        <div id="customer-select-wrap" class="hidden px-5 py-2 border-t border-slate-200/80 dark:border-slate-800/40 space-y-1">
+            <label class="text-slate-500 dark:text-slate-400 text-[11px] font-semibold">Customer (CRM)</label>
+            <select id="customer-select" class="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 rounded-xl px-3 py-2 text-xs text-slate-800 dark:text-white focus:outline-none focus:border-indigo-500">
+                <option value="">Walk-in Customer</option>
+                @foreach ($customers as $c)
+                    <option value="{{ $c->id }}">{{ $c->name }} ({{ ucfirst($c->tier) }})</option>
+                @endforeach
+            </select>
+        </div>
+
+        {{-- Discount Selector --}}
+        <div id="discount-wrap" class="hidden px-5 py-2 border-t border-slate-200/80 dark:border-slate-800/40 flex items-center justify-between gap-3">
+            <span class="text-slate-500 dark:text-slate-400 text-xs font-semibold">Discount</span>
+            <div class="flex items-center gap-1 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 rounded-xl px-2.5 py-1">
+                <input id="discount-pct" type="number" min="0" max="100" placeholder="0" class="w-10 bg-transparent text-xs text-slate-800 dark:text-white focus:outline-none text-right font-semibold border-0 p-0" />
+                <span class="text-xs text-slate-400 font-bold">%</span>
+            </div>
+        </div>
+
+        {{-- Payment Method Selection --}}
+        <div id="payment-wrap" class="hidden px-5 py-2 border-t border-slate-200/80 dark:border-slate-800/40 space-y-1.5">
+            <span class="text-slate-500 dark:text-slate-400 text-xs font-semibold">Payment Method</span>
+            <div class="grid grid-cols-3 gap-2">
+                <button type="button" data-payment-method="Cash" class="py-1.5 rounded-lg text-xs font-medium border border-indigo-650 bg-indigo-600/10 text-indigo-600 dark:text-indigo-400 transition-all duration-200">Cash</button>
+                <button type="button" data-payment-method="Card" class="py-1.5 rounded-lg text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-all duration-200">Card</button>
+                <button type="button" data-payment-method="QR" class="py-1.5 rounded-lg text-xs font-medium border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-all duration-200">QR</button>
+            </div>
         </div>
 
         {{-- Totals --}}
@@ -173,6 +203,10 @@
                 <span>Service Charge (10%)</span>
                 <span id="cart-service" class="text-slate-800 dark:text-white font-semibold tabular-nums">LKR 0.00</span>
             </div>
+            <div id="discount-row" class="hidden flex justify-between text-sm text-slate-500 dark:text-slate-400">
+                <span>Discount</span>
+                <span id="cart-discount" class="text-red-500 font-semibold tabular-nums">-LKR 0.00</span>
+            </div>
             <div class="flex justify-between text-base font-bold pt-2 border-t border-slate-200/80 dark:border-slate-800/60">
                 <span class="text-slate-800 dark:text-white">Grand Total</span>
                 <span id="cart-total" class="text-indigo-600 dark:text-indigo-400 text-lg tabular-nums">LKR 0.00</span>
@@ -181,6 +215,19 @@
 
         {{-- Action Buttons --}}
         <div class="px-5 pb-5 pt-3 space-y-2.5 flex-shrink-0">
+            <div class="flex gap-2">
+                <button type="button" id="split-bill-btn" disabled
+                    class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl font-semibold text-xs border border-indigo-500/30 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-600/10 cursor-not-allowed opacity-50 transition-all duration-200">
+                    <x-icon name="arrow-right-left" size="13" />
+                    Split Bill
+                </button>
+                <button type="button" id="print-invoice-btn" disabled
+                    class="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl font-semibold text-xs border border-slate-200 dark:border-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white cursor-not-allowed opacity-50 transition-all duration-200">
+                    <x-icon name="printer" size="13" />
+                    Bill PDF
+                </button>
+            </div>
+
             <button type="button" id="print-kot" disabled
                 class="w-full flex items-center justify-center gap-2.5 py-3 rounded-xl font-semibold text-sm border transition-all duration-200 bg-slate-100 dark:bg-slate-800/40 text-slate-400 dark:text-slate-500 border-slate-200 dark:border-transparent cursor-not-allowed">
                 <x-icon name="printer" size="16" />
@@ -198,5 +245,9 @@
 @endsection
 
 @section('scripts')
+<script>
+    window.POS_CATEGORIES = @json($posCategories);
+    window.POS_MENU_ITEMS = @json($posMenuItems);
+</script>
 @vite('resources/js/pages/pos-index.js')
 @endsection

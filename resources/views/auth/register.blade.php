@@ -1,6 +1,6 @@
 @extends('layouts.guest')
 
-@section('title', 'Sign In — ' . config('app.name', 'Sagaki Restaurant POS'))
+@section('title', 'Create Account — ' . config('app.name', 'Sagaki Restaurant POS'))
 
 @push('styles')
 <style>
@@ -315,7 +315,7 @@ html, body { height: 100%; font-family: 'Inter', -apple-system, BlinkMacSystemFo
     animation: sg-fade-up 0.7s ease 0.4s both;
 }
 
-/* ─── Decorative overlay behind the login box ─── */
+/* ─── Decorative overlay behind the box ─── */
 .sg-form-decor {
     position: absolute;
     inset: 0;
@@ -471,7 +471,7 @@ html, body { height: 100%; font-family: 'Inter', -apple-system, BlinkMacSystemFo
 }
 .sg-toggle-pw:hover { color: #f59e0b; background: #fef3c7; }
 
-/* Remember + Forgot row */
+/* Remember row */
 .sg-row {
     display: flex;
     align-items: center;
@@ -573,16 +573,22 @@ html, body { height: 100%; font-family: 'Inter', -apple-system, BlinkMacSystemFo
     display: inline-flex; align-items: center; gap: 8px;
 }
 
-/* Card copyright notice */
-.sg-card-copy {
-    margin-top: 1.9rem;
+/* Sign-in link bottom */
+.sg-forgot {
+    margin-top: 1.7rem;
     text-align: center;
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.03em;
-    color: #94a3b8;
     animation: sg-fade-up 0.7s ease 0.55s both;
 }
+.sg-forgot a {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #64748b;
+    text-decoration: none;
+    transition: color 0.2s;
+    border-bottom: 1px solid #cbd5e1;
+    padding-bottom: 2px;
+}
+.sg-forgot a:hover { color: #f59e0b; border-color: #fbbf24; }
 
 /* Alerts */
 .sg-alert {
@@ -810,6 +816,7 @@ html, body { height: 100%; font-family: 'Inter', -apple-system, BlinkMacSystemFo
     .sg-h2 { font-size: 22px; }
     .sg-h2-sub { font-size: 13.5px; }
     .sg-input { height: 50px; }
+    .sg-input--sm { height: 50px; }
     .sg-btn { height: 52px; }
     .sg-brand-tag { display: none; }
 }
@@ -853,13 +860,13 @@ html, body { height: 100%; font-family: 'Inter', -apple-system, BlinkMacSystemFo
         {{-- Center marketing text --}}
         <div class="sg-dark-center">
             <h1 class="sg-dark-h1">
-                Manage your restaurant
+                Four steps from signup
                 <br>
-                <span>effortlessly.</span>
+                <span>to your first order.</span>
             </h1>
             <p class="sg-dark-text">
-                From the moment a guest walks in to when the last plate leaves the kitchen —
-                Sagaki orchestrates your entire restaurant with calm precision and intuitive flow.
+                Join Sagaki and bring every moving piece of your restaurant together —
+                tables, kitchen, orders and insights flowing in one calm, intuitive workspace.
             </p>
 
             {{-- Bento Feature Cards --}}
@@ -908,11 +915,11 @@ html, body { height: 100%; font-family: 'Inter', -apple-system, BlinkMacSystemFo
             </div>
         </div>
 
-        {{-- Footer register --}}
+        {{-- Footer login --}}
         <div class="sg-dark-foot">
-            <div class="sg-foot-q">Don't have an account?</div>
-            <a href="{{ route('register') }}" class="sg-foot-link">
-                Register now
+            <div class="sg-foot-q">Already have an account?</div>
+            <a href="{{ route('login') }}" class="sg-foot-link">
+                Log in
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
                 </svg>
@@ -1032,7 +1039,7 @@ html, body { height: 100%; font-family: 'Inter', -apple-system, BlinkMacSystemFo
             </svg>
         </div>
 
-        {{-- Decorative overlay: golden swish flowing behind the login box --}}
+        {{-- Decorative overlay: golden swish flowing behind the box --}}
         <div class="sg-form-decor" aria-hidden="true">
             <div class="sg-form-halo"></div>
             <svg class="sg-swish" viewBox="0 0 720 900" preserveAspectRatio="none">
@@ -1061,19 +1068,11 @@ html, body { height: 100%; font-family: 'Inter', -apple-system, BlinkMacSystemFo
 
         <div class="sg-form-wrap">
             <div class="sg-form-head">
-                <h2 class="sg-h2">Log In to your account <span>to continue</span></h2>
-                <p class="sg-h2-sub">Welcome back. Sign in to access your dashboard and start managing orders.</p>
+                <h2 class="sg-h2">Create your account <span>to get started</span></h2>
+                <p class="sg-h2-sub">Join Sagaki and start turning tables into sales in minutes.</p>
             </div>
 
             {{-- Alerts --}}
-            @if (session('status'))
-                <div class="sg-alert ok">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;margin-top:1px;" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z"/><path d="m9 12 2 2 4-4"/>
-                    </svg>
-                    <div>{{ session('status') }}</div>
-                </div>
-            @endif
             @if ($errors->any())
                 <div class="sg-alert err">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;margin-top:1px;" stroke-linecap="round" stroke-linejoin="round">
@@ -1085,12 +1084,35 @@ html, body { height: 100%; font-family: 'Inter', -apple-system, BlinkMacSystemFo
             @endif
 
             {{-- Form --}}
-            <form method="POST" action="{{ route('login') }}" id="login-form" class="sg-form">
+            <form method="POST" action="{{ route('register') }}" id="register-form" class="sg-form">
                 @csrf
+
+                {{-- Full Name --}}
+                <div>
+                    <label for="name" class="sg-field-label">Full Name</label>
+                    <div class="sg-field">
+                        <div class="sg-field-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                        </div>
+                        <input id="name" name="name" type="text" value="{{ old('name') }}"
+                               required autofocus autocomplete="name"
+                               placeholder="John Doe"
+                               class="sg-input @error('name') error @enderror">
+                    </div>
+                    @error('name')
+                        <div class="sg-field-error">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
 
                 {{-- Email --}}
                 <div>
-                    <label for="email" class="sg-field-label">Username or Email</label>
+                    <label for="email" class="sg-field-label">Email Address</label>
                     <div class="sg-field">
                         <div class="sg-field-icon">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1099,7 +1121,7 @@ html, body { height: 100%; font-family: 'Inter', -apple-system, BlinkMacSystemFo
                             </svg>
                         </div>
                         <input id="email" name="email" type="email" value="{{ old('email') }}"
-                               required autofocus autocomplete="username"
+                               required autocomplete="email"
                                placeholder="yourmail@mail.com"
                                class="sg-input @error('email') error @enderror">
                     </div>
@@ -1122,7 +1144,7 @@ html, body { height: 100%; font-family: 'Inter', -apple-system, BlinkMacSystemFo
                             </svg>
                         </div>
                         <input id="password" name="password" type="password"
-                               required autocomplete="current-password"
+                               required autocomplete="new-password"
                                placeholder="••••••••"
                                class="sg-input @error('password') error @enderror"
                                style="padding-right:56px;letter-spacing:0.14em;">
@@ -1139,34 +1161,65 @@ html, body { height: 100%; font-family: 'Inter', -apple-system, BlinkMacSystemFo
                     </div>
                     @error('password')
                         <div class="sg-field-error">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/></svg>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
                             {{ $message }}
                         </div>
                     @enderror
                 </div>
 
-                {{-- Remember / Forgot --}}
-                <div class="sg-row">
-                    <label class="sg-remember" onclick="sgToggleCb()">
-                        <div id="sg-cb" class="sg-cb">
-                            <svg id="sg-cb-check" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                {{-- Confirm Password --}}
+                <div>
+                    <label for="password_confirmation" class="sg-field-label">Confirm Password</label>
+                    <div class="sg-field">
+                        <div class="sg-field-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 12l2 2 4-4"/>
+                                <path d="M21 7v3a10 10 0 0 1-10 10H6a3 3 0 0 1-3-3v-2a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a2 2 0 0 0 2 2 10 10 0 0 0 10-10V7"/>
+                                <path d="M12 3h3a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V5a2 2 0 0 0-2-2Z"/>
+                                <path d="M15 5h3a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V5"/>
+                            </svg>
+                        </div>
+                        <input id="password_confirmation" name="password_confirmation" type="password"
+                               required autocomplete="new-password"
+                               placeholder="••••••••"
+                               class="sg-input @error('password') error @enderror"
+                               style="padding-right:56px;letter-spacing:0.14em;">
+                        <button type="button" id="toggle-pw2" class="sg-toggle-pw" tabindex="-1">
+                            <svg id="eye-show2" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                            <svg id="eye-hide2" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                                <path d="M9.88 9C9 9.17 8.19 9.48 7.5 10M5 16.5A10.7 10.7 0 0 1 1.94 12a10.75 10.75 0 0 1 6.53-5.05M14.12 14.12A10.75 10.75 0 0 0 22.06 12a10.7 10.7 0 0 0-4.56-4.5"/>
+                                <path d="M1 1l22 22"/>
+                            </svg>
+                        </button>
+                    </div>
+                    @error('password_confirmation')
+                        <div class="sg-field-error">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+
+                {{-- Terms checkbox --}}
+                <div class="sg-row" style="justify-content:flex-start;">
+                    <label class="sg-remember" onclick="sgToggleTerms()">
+                        <div id="sg-terms-cb" class="sg-cb">
+                            <svg id="sg-terms-check" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
                                 <path d="m5 13 4 4L19 7"/>
                             </svg>
                         </div>
-                        <input type="checkbox" name="remember" id="remember" value="1" style="position:absolute;opacity:0;pointer-events:none;">
-                        <span class="sg-remember-label">Remember Me</span>
+                        <input type="checkbox" name="terms" id="terms" value="1" style="position:absolute;opacity:0;pointer-events:none;" required>
+                        <span class="sg-remember-label">I agree to the <a href="#" class="sg-link" onclick="event.preventDefault()">Terms of Service & Privacy Policy</a></span>
                     </label>
-                    @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}" class="sg-link">Forgot Password?</a>
-                    @else
-                        <a href="#" class="sg-link">Forgot Password?</a>
-                    @endif
                 </div>
 
                 {{-- Submit --}}
-                <button type="submit" id="login-submit" class="sg-btn">
+                <button type="submit" id="register-submit" class="sg-btn">
                     <span>
-                        LOG IN
+                        CREATE ACCOUNT
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
                         </svg>
@@ -1174,8 +1227,10 @@ html, body { height: 100%; font-family: 'Inter', -apple-system, BlinkMacSystemFo
                 </button>
             </form>
 
-            {{-- Card copyright notice --}}
-            <div class="sg-card-copy">2026 © Nerdtech Labs. All rights reserved.</div>
+            {{-- Sign-in link --}}
+            <div class="sg-forgot">
+                <a href="{{ route('login') }}">Already have an account? Log in</a>
+            </div>
         </div>
     </section>
 </div>
@@ -1185,42 +1240,45 @@ html, body { height: 100%; font-family: 'Inter', -apple-system, BlinkMacSystemFo
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     // Password toggle
-    var togglePw = document.getElementById('toggle-pw');
-    var pwInput  = document.getElementById('password');
-    var eyeShow  = document.getElementById('eye-show');
-    var eyeHide  = document.getElementById('eye-hide');
-    if (togglePw && pwInput) {
-        togglePw.addEventListener('click', function () {
-            var show = pwInput.type === 'password';
-            pwInput.type = show ? 'text' : 'password';
-            pwInput.style.letterSpacing = show ? '0' : '0.14em';
-            eyeShow.style.display = show ? 'none' : '';
-            eyeHide.style.display = show ? ''     : 'none';
+    function bindToggle(btnId, inputId, eyeShowId, eyeHideId) {
+        var toggle = document.getElementById(btnId);
+        var input  = document.getElementById(inputId);
+        var show   = document.getElementById(eyeShowId);
+        var hide   = document.getElementById(eyeHideId);
+        if (!toggle || !input) return;
+        toggle.addEventListener('click', function () {
+            var isPw = input.type === 'password';
+            input.type = isPw ? 'text' : 'password';
+            input.style.letterSpacing = isPw ? '0' : '0.14em';
+            show.style.display = isPw ? 'none' : '';
+            hide.style.display = isPw ? ''     : 'none';
         });
     }
+    bindToggle('toggle-pw',  'password',               'eye-show',  'eye-hide');
+    bindToggle('toggle-pw2', 'password_confirmation',  'eye-show2', 'eye-hide2');
 
     // Submit loading state
-    var form = document.getElementById('login-form');
-    var btn  = document.getElementById('login-submit');
+    var form = document.getElementById('register-form');
+    var btn  = document.getElementById('register-submit');
     if (form && btn) {
         form.addEventListener('submit', function () {
             btn.disabled = true;
             btn.querySelector('span').innerHTML =
                 '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.8" style="animation:sg-spin .7s linear infinite;">' +
                 '<path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>' +
-                'SIGNING IN…';
+                'CREATING ACCOUNT…';
         });
     }
 });
 
-// Custom checkbox
-var sgCbState = false;
-function sgToggleCb() {
-    sgCbState = !sgCbState;
-    var wrap  = document.getElementById('sg-cb');
-    var check = document.getElementById('sg-cb-check');
-    var input = document.getElementById('remember');
-    if (sgCbState) {
+// Custom terms checkbox
+var sgTermsState = false;
+function sgToggleTerms() {
+    sgTermsState = !sgTermsState;
+    var wrap  = document.getElementById('sg-terms-cb');
+    var check = document.getElementById('sg-terms-check');
+    var input = document.getElementById('terms');
+    if (sgTermsState) {
         wrap.classList.add('on'); check.style.display = ''; input.checked = true;
     } else {
         wrap.classList.remove('on'); check.style.display = 'none'; input.checked = false;
