@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('table_id')->constrained('restaurant_tables')->onDelete('cascade');
+            $table->foreignId('table_id')->nullable()->constrained('tables')->onDelete('cascade');
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->string('customer_name');
             $table->string('customer_phone');
@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('party_size');
             $table->date('reservation_date');
             $table->time('reservation_time');
-            $table->enum('status', ['pending', 'confirmed', 'seated', 'completed', 'cancelled', 'no_show'])->default('pending');
+            $table->string('status')->default('pending');
             $table->text('special_requests')->nullable();
             $table->timestamp('checked_in_at')->nullable();
             $table->timestamp('completed_at')->nullable();

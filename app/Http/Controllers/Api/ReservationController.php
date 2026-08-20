@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Reservation;
-use App\Models\RestaurantTable;
+use App\Models\Table;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -32,21 +32,17 @@ class ReservationController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'table_id' => 'required|exists:restaurant_tables,id',
+            'table_id' => 'required|exists:tables,id',
             'customer_name' => 'required|string|max:255',
             'customer_phone' => 'required|string|max:20',
             'customer_email' => 'nullable|email',
             'party_size' => 'required|integer|min:1',
             'reservation_date' => 'required|date|after_or_equal:today',
-            'reservation_time' => 'required|date_format:H:i',
+            'reservation_time' => 'required',
             'special_requests' => 'nullable|string',
         ]);
 
-        $table = RestaurantTable::find($validated['table_id']);
-
-        if ($table->status === 'maintenance') {
-            return response()->json(['message' => 'Table is under maintenance'], 422);
-        }
+        $table = Table::find($validated['table_id']);
 
         $conflict = Reservation::where('table_id', $validated['table_id'])
             ->where('reservation_date', $validated['reservation_date'])
@@ -75,7 +71,7 @@ class ReservationController extends Controller
 
     public function show(Reservation $reservation): JsonResponse
     {
-        $reservation->load('table', 'order');
+        $reservation->load('table');
 
         return response()->json($reservation);
     }
@@ -88,7 +84,7 @@ class ReservationController extends Controller
             'customer_email' => 'nullable|email',
             'party_size' => 'sometimes|integer|min:1',
             'reservation_date' => 'sometimes|date',
-            'reservation_time' => 'sometimes|date_format:H:i',
+            'reservation_time' => 'sometimes',
             'status' => 'sometimes|in:pending,confirmed,seated,completed,cancelled,no_show',
             'special_requests' => 'nullable|string',
         ]);
@@ -105,12 +101,12 @@ class ReservationController extends Controller
             if (in_array($validated['status'], ['completed', 'cancelled', 'no_show'])) {
                 $table = $reservation->table;
                 if ($table) {
-                    $hasActiveReservation = Reservation::where('table_id', $table->id)
+                    $hasActive = Reservation::where('table_id', $table->id)
                         ->where('id', '!=', $reservation->id)
                         ->whereNotIn('status', ['completed', 'cancelled', 'no_show'])
                         ->exists();
 
-                    if (! $hasActiveReservation) {
+                    if (! $hasActive) {
                         $table->update(['status' => 'available']);
                     }
                 }
@@ -128,12 +124,12 @@ class ReservationController extends Controller
 
         $table = $reservation->table;
         if ($table) {
-            $hasActiveReservation = Reservation::where('table_id', $table->id)
+            $hasActive = Reservation::where('table_id', $table->id)
                 ->where('id', '!=', $reservation->id)
                 ->whereNotIn('status', ['completed', 'cancelled', 'no_show'])
                 ->exists();
 
-            if (! $hasActiveReservation) {
+            if (! $hasActive) {
                 $table->update(['status' => 'available']);
             }
         }
@@ -158,7 +154,7 @@ class ReservationController extends Controller
             'party_size' => 'required|integer|min:1',
         ]);
 
-        $tables = RestaurantTable::where('status', '!=', 'maintenance')
+        $tables = Table::where('status', '!=', 'maintenance')
             ->where('seats', '>=', $request->party_size)
             ->get();
 

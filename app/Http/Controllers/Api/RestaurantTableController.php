@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\RestaurantTable;
+use App\Models\Table;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -11,7 +11,7 @@ class RestaurantTableController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = RestaurantTable::query();
+        $query = Table::query();
 
         if ($request->has('status')) {
             $query->where('status', $request->status);
@@ -26,7 +26,7 @@ class RestaurantTableController extends Controller
         return response()->json($tables);
     }
 
-    public function show(RestaurantTable $table): JsonResponse
+    public function show(Table $table): JsonResponse
     {
         $table->load(['reservations' => function ($query) {
             $query->where('reservation_date', '>=', now()->toDateString())
@@ -37,10 +37,10 @@ class RestaurantTableController extends Controller
         return response()->json($table);
     }
 
-    public function updateStatus(Request $request, RestaurantTable $table): JsonResponse
+    public function updateStatus(Request $request, Table $table): JsonResponse
     {
         $request->validate([
-            'status' => 'required|in:available,occupied,reserved,maintenance',
+            'status' => 'required|in:available,occupied,reserved',
         ]);
 
         $table->update(['status' => $request->status]);
@@ -50,14 +50,7 @@ class RestaurantTableController extends Controller
 
     public function floorPlan(): JsonResponse
     {
-        $tables = RestaurantTable::all()->map(fn ($table) => [
-            'id' => $table->id,
-            'name' => $table->name,
-            'type' => $table->type,
-            'seats' => $table->seats,
-            'status' => $table->status,
-            'section' => $table->section,
-        ]);
+        $tables = Table::all();
 
         $stats = [
             'total' => $tables->count(),

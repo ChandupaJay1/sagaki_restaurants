@@ -36,7 +36,7 @@ class Reservation extends Model
 
     public function table()
     {
-        return $this->belongsTo(RestaurantTable::class, 'table_id');
+        return $this->belongsTo(Table::class);
     }
 
     public function user()
@@ -44,19 +44,8 @@ class Reservation extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function order()
-    {
-        return $this->hasOne(Order::class);
-    }
-
     public function scopeForDate($query, $date)
     {
         return $query->where('reservation_date', $date);
-    }
-
-    public function scopeUpcoming($query)
-    {
-        return $query->where('reservation_date', '>=', now()->toDateString())
-                     ->where('status', '!=', 'cancelled');
     }
 }
