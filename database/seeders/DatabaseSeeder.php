@@ -33,5 +33,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'kamali@sagaki.com',
             'password' => Hash::make('password'),
         ]);
+
+        $this->call(RestaurantSeeder::class);
     }
 }
